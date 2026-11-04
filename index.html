@@ -9,7 +9,7 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_PT">
 <meta property="og:title" content="Ficha do imóvel · Francisco Soares">
-<meta property="og:description" content="Vamos conhecer a sua casa. Cerca de 5 minutos para o essencial.">
+<meta property="og:description" content="Ficha do imóvel: ajude-me a conhecer a sua casa antes das gravações e das visitas. Cerca de 15 minutos.">
 <meta property="og:image" content="https://franciscosoaresconsultor.github.io/ficha-imovel/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -85,6 +85,8 @@ select.in{padding-right:38px;background-image:linear-gradient(45deg,transparent 
 .inwrap .in{padding-right:44px}
 .suffix{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;font-size:.9rem}
 .opts{display:flex;flex-wrap:wrap;gap:8px}
+.outro{margin-top:12px}
+.outro .lbl{margin-bottom:4px}
 .opt{border:1px solid #c3cddb;background:#fff;border-radius:999px;padding:10px 16px;min-height:44px;cursor:pointer;line-height:1.2;transition:background .15s,color .15s,border-color .15s,transform .1s}
 .opt:active{transform:scale(.97)}
 .opt:hover{border-color:var(--blue)}
@@ -175,12 +177,12 @@ footer{padding:8px 0 40px;text-align:center;font-size:.8rem;color:var(--muted)}
 
     <section id="intro" class="card">
       <p class="eyebrow">Ficha do imóvel</p>
-      <h1>Vamos conhecer a sua casa</h1>
-      <p class="lead">Quanto melhor eu conhecer o imóvel — o que tem, a sua história e o que o torna especial —, melhor o consigo apresentar e valorizar.</p>
+      <h1>Vamos preparar a venda da sua casa</h1>
+      <p class="lead">Antes de gravarmos os vídeos e de definirmos a estratégia, quero conhecer o imóvel ao pormenor: o que tem, como funciona e o que o torna especial. Assim, nas visitas, sei onde está cada coisa e não preciso de lhe pedir ajuda.</p>
       <ul class="ticks">
-        <li>Primeiro o essencial, em cerca de 5 minutos. Depois, se quiser, os detalhes: mais uns 10.</li>
-        <li>Quase tudo é opcional. Só o contacto e a localização do imóvel são obrigatórios; o que não souber, falamos juntos.</li>
-        <li>Pode parar quando quiser: o progresso fica guardado neste dispositivo.</li>
+        <li>Cerca de 15 minutos. Pode parar quando quiser: o progresso fica guardado neste dispositivo.</li>
+        <li>Quase tudo é opcional. Só o contacto, o tipo de imóvel e o concelho são obrigatórios; o que não souber, deixe em branco e falamos juntos.</li>
+        <li>Perguntas só sobre o imóvel: não pedimos dados financeiros nem documentos de identificação.</li>
       </ul>
       <div class="actions">
         <button type="button" id="start" class="btn gold">Começar</button>
@@ -242,108 +244,126 @@ const N=(id,label,o)=>Object.assign({id:id,label:label,type:"number"},o);
 const R=(id,label,opts,o)=>Object.assign({id:id,label:label,type:"radio",opts:opts},o);
 const C=(id,label,opts,o)=>Object.assign({id:id,label:label,type:"chips",opts:opts},o);
 const D=(id,label,opts,o)=>Object.assign({id:id,label:label,type:"select",opts:opts},o);
+/* «Outro», «Outra situação», «Outro motivo»…: a pessoa pode sempre escrever qual é */
+const isOutro=o=>/^outr[oa]s?(\s|$)/i.test(String(o));
+const outroOf=f=>(f.opts||[]).filter(isOutro)[0]||null;
+const OK=f=>f.id+"__outro";
 
 const STEPS=[
-/* ---------- PARTE 1 · O ESSENCIAL ---------- */
-{id:"sobre",part:1,title:"Para começar",intro:"Como podemos falar?",fields:[
+{id:"inicio",title:"Para começar",intro:"Quem é o proprietário e que imóvel é este.",fields:[
   T("nome","O seu nome",{req:true,autocomplete:"name"}),
   T("telemovel","Telemóvel",{type:"tel",req:true,autocomplete:"tel",ph:"9xx xxx xxx",hint:"De preferência com WhatsApp."}),
   T("email","Email",{type:"email",autocomplete:"email",hint:"Opcional."}),
-  C("contacto_pref","Como prefere que o contacte?",["WhatsApp","Chamada","Email"]),
-  R("horario","Melhor altura do dia para falarmos",["Manhã","Hora de almoço","Tarde","Fim do dia","Indiferente"])
-]},
-
-{id:"imovel",part:1,title:"O imóvel",intro:"Onde fica e o essencial sobre ele.",fields:[
   R("tipo_imovel","Que tipo de imóvel é?",["Apartamento","Moradia","Quinta / herdade","Terreno","Prédio","Loja / escritório","Outro"],{req:true}),
-  T("tipo_outro","Qual?",{show:v=>v.tipo_imovel==="Outro"}),
-  T("morada","Morada",{ph:"Rua e localidade",hint:"Se preferir, indique apenas a rua; o número fica para quando nos encontrarmos."}),
+  T("morada","Morada",{ph:"Rua e localidade"}),
   T("freguesia","Freguesia",{half:true}),
   T("concelho","Concelho",{req:true,half:true}),
-  T("fracao","Andar e fração",{ph:"Ex.: 3.º Esq., fração F",show:v=>["Apartamento","Loja / escritório"].indexOf(v.tipo_imovel)>-1}),
-  R("tipologia","Tipologia",["T0","T1","T2","T3","T4","T5","T6 ou superior"],{show:edificio}),
+  T("fracao","Andar e fração",{ph:"Ex.: 3.º Esq., fração F",show:v=>["Apartamento","Loja / escritório"].indexOf(v.tipo_imovel)>-1})
+]},
+
+{id:"espacos",title:"Espaços e dimensões",intro:"Como é o imóvel por dentro e por fora.",fields:[
+  R("terreno_tipo","Classificação do terreno",["Urbano","Rústico","Misto","Não sei"],{show:terreno}),
+  A("terreno_detalhe","O que se pode construir? Que acessos e infraestruturas tem?",{show:terreno,hint:"PDM, viabilidade de construção, água, eletricidade, acessos, poços, árvores…"}),
   N("area_util","Área útil aproximada",{unit:"m²",show:edificio,hint:"Consta da caderneta predial ou do certificado energético."}),
   N("area_terreno","Área do terreno",{unit:"m²",show:v=>["Moradia","Quinta / herdade","Terreno","Prédio"].indexOf(v.tipo_imovel)>-1}),
   N("ano_construcao","Ano de construção (aprox.)",{show:edificio,ph:"Ex.: 1998"}),
   R("estado","Em que estado se encontra?",["Novo ou como novo","Muito bom","Bom","Precisa de obras ligeiras","Precisa de obras profundas"],{show:edificio}),
-  C("extras","Tem algum destes extras?",["Jardim","Varanda / terraço","Piscina","Elevador","Arrecadação","Churrasqueira","Vista desafogada"],{show:edificio})
-]},
-
-{id:"venda",part:1,title:"A venda",intro:"Para alinharmos expectativas desde o início. Responda apenas ao que lhe for confortável.",fields:[
-  C("motivo","Qual é o motivo da venda?",["Mudar para uma casa maior","Mudar para uma casa mais pequena","Mudança de cidade ou de país","Alteração da situação familiar","Partilha de herança","Investimento","Reforma","Outro motivo"],{hint:"Pode escolher mais do que uma."}),
-  R("prazo","Em que prazo gostaria de vender?",["O mais breve possível","Nos próximos 3 meses","Entre 3 e 6 meses","Entre 6 e 12 meses","Sem pressa"]),
-  T("preco_esperado","Tem um valor em mente?",{inputmode:"decimal",ph:"€",hint:"Opcional. Se preferir, começamos por um estudo de mercado e falamos disso depois."}),
-  R("ocupacao","Neste momento, o imóvel está…",["Habitado por si ou pela família","Devoluto","Arrendado","Segunda habitação","Em obras","Outra situação"],{show:edificio}),
-  R("proprietarios","Quem são os proprietários?",["Só eu","Eu e mais pessoas","Herança, com vários herdeiros"]),
-  T("outros_prop","Nomes dos outros proprietários",{ph:"Nomes completos",show:v=>!!v.proprietarios&&v.proprietarios!=="Só eu"}),
-  R("acordo","Estão todos de acordo com a venda?",["Sim","Estamos a conversar","Ainda não falámos"],{show:v=>!!v.proprietarios&&v.proprietarios!=="Só eu"})
-]},
-
-{id:"essencial",part:1,kind:"checkpoint",title:"O essencial está feito",fields:[]},
-
-/* ---------- PARTE 2 · OS DETALHES ---------- */
-{id:"espacos",part:2,title:"Espaços e estado",intro:"Como é o imóvel por dentro e por fora.",fields:[
-  R("terreno_tipo","Classificação do terreno",["Urbano","Rústico","Misto","Não sei"],{show:terreno}),
-  A("terreno_detalhe","O que se pode construir? Que acessos e infraestruturas tem?",{show:terreno,hint:"PDM, viabilidade de construção, água, eletricidade, acessos, poços, árvores…"}),
   N("quartos","Quartos",{show:edificio}),
   N("suites","Dos quais, suítes",{show:edificio}),
   N("wc","Casas de banho",{show:edificio}),
   N("pisos","Pisos",{show:edificio}),
-  C("cozinha","Cozinha",["Equipada","Remodelada","Aberta para a sala","Ilha ou península","Despensa","Original / antiga"],{show:edificio}),
-  C("espacos_extra","Outros espaços",["Escritório","Lavandaria","Sótão","Cave","Arrecadação","Quarto de hóspedes","Ginásio / sala de jogos","Adega","Marquise","Closet"],{show:edificio}),
-  R("garagem","Estacionamento",["Garagem fechada","Lugar de garagem em parque","Lugar ao ar livre","Sem estacionamento próprio"],{show:edificio}),
+  C("cozinha","Cozinha",["Equipada","Remodelada","Aberta para a sala","Ilha ou península","Despensa","Original / antiga","Outro"],{show:edificio}),
+  C("espacos_extra","Outros espaços",["Escritório","Lavandaria","Sótão","Cave","Arrecadação","Quarto de hóspedes","Ginásio / sala de jogos","Adega","Marquise","Closet","Outro"],{show:edificio}),
+  R("garagem","Estacionamento",["Garagem fechada","Lugar de garagem em parque","Lugar ao ar livre","Sem estacionamento próprio","Outro"],{show:edificio}),
+  C("extras","Tem algum destes extras?",["Jardim","Varanda / terraço","Piscina","Elevador","Arrecadação","Churrasqueira","Poço ou furo","Anexo / casa de apoio","Outro"],{show:edificio}),
   T("piscina","Piscina: dimensões, tipo e estado",{show:v=>has(v,"extras","Piscina"),ph:"Ex.: 8×4 m, sal, aquecida, de 2018"}),
-  C("vistas","Vistas",["Mar","Rio","Serra","Campo","Cidade","Jardim","Sem vista especial"],{excl:["Sem vista especial"]}),
-  C("orientacao","Orientação solar",["Norte","Sul","Nascente","Poente","Não sei"],{excl:["Não sei"]}),
-  C("clima","Aquecimento e arrefecimento",["Ar condicionado","Bomba de calor","Piso radiante","Radiadores","Lareira ou recuperador","Painéis solares térmicos","Sem aquecimento"],{show:edificio,excl:["Sem aquecimento"]}),
-  C("tecnologia","Energia, segurança e conforto",["Painéis fotovoltaicos","Carregador de veículo elétrico","Domótica","Alarme","Videoporteiro","Fibra ótica","Aspiração central","Acesso para mobilidade reduzida"],{show:edificio}),
-  D("classe_energetica","Classe energética",["A+","A","B","B-","C","D","E","F","Não tenho certificado","Não sei"],{show:edificio}),
-  A("equipamentos","O que fica no imóvel?",{rows:3,show:edificio,hint:"Mobiliário, eletrodomésticos, ar condicionado… e o que prefere levar."}),
   A("divisoes","Descreva o imóvel divisão a divisão",{rows:5,show:edificio,hint:"Opcional. Tamanhos aproximados e o que tem cada divisão; pode escrever em tópicos."})
 ]},
 
-{id:"obras",part:2,title:"Obras e situação",intro:"O que já foi feito e o que convém saber. Dizer tudo desde o início evita surpresas mais tarde.",fields:[
+{id:"conforto",title:"Conforto e equipamentos",intro:"O que torna o dia a dia confortável e o que fica com a casa.",fields:[
+  C("vistas","Vistas",["Mar","Rio","Serra","Campo","Cidade","Jardim","Sem vista especial","Outro"],{excl:["Sem vista especial"]}),
+  C("orientacao","Orientação solar",["Norte","Sul","Nascente","Poente","Não sei"],{excl:["Não sei"]}),
+  C("janelas","Janelas e estores",["Alumínio","PVC","Madeira","Vidro duplo","Estores elétricos","Persianas","Portadas","Outro"],{show:edificio}),
+  C("clima","Aquecimento e arrefecimento",["Ar condicionado","Bomba de calor","Piso radiante","Radiadores","Lareira ou recuperador","Painéis solares térmicos","Sem aquecimento","Outro"],{show:edificio,excl:["Sem aquecimento"]}),
+  C("tecnologia","Energia, segurança e conforto",["Painéis fotovoltaicos","Carregador de veículo elétrico","Domótica","Alarme","Videoporteiro","Fibra ótica","Aspiração central","Acesso para mobilidade reduzida","Outro"],{show:edificio}),
+  D("classe_energetica","Classe energética",["A+","A","B","B-","C","D","E","F","Não tenho certificado","Não sei"],{show:edificio}),
+  A("equipamentos","O que fica no imóvel?",{rows:3,show:edificio,hint:"Mobiliário, eletrodomésticos, ar condicionado… e o que prefere levar."})
+]},
+
+{id:"historico",title:"Obras, estado e condomínio",intro:"O que já foi feito e o que convém saber. Dizer tudo desde o início evita surpresas mais tarde.",fields:[
   N("ano_aquisicao","Desde que ano é seu?",{ph:"Ex.: 2008"}),
   R("forma_aquisicao","Como o adquiriu?",["Compra","Herança","Doação","Construção própria","Outra"]),
   R("obras_tem","Já fez obras ou melhorias?",["Sim","Não","Não me recordo"],{show:edificio}),
   {id:"obras",label:"Obras realizadas",type:"repeater",itemLabel:"Obra",show:v=>edificio(v)&&v.obras_tem==="Sim",
-    cols:[{k:"ano",label:"Ano",ph:"2019",num:true},{k:"valor",label:"Valor aprox. (€)",num:true},{k:"descricao",label:"O que foi feito",wide:true},{k:"licenca",label:"Com licença?",opts:["Sim","Não","Não sei"]},{k:"faturas",label:"Tem faturas?",opts:["Sim","Não"]}],
-    rowFmt:r=>(r.ano||"s/ data")+": "+(r.descricao||"obra")+(r.valor?" ("+r.valor+" €)":"")+(r.licenca?" · licença: "+r.licenca:"")+(r.faturas?" · faturas: "+r.faturas:"")},
+    cols:[{k:"ano",label:"Ano",ph:"2019",num:true},{k:"licenca",label:"Com licença?",opts:["Sim","Não","Não sei"]},{k:"descricao",label:"O que foi feito",wide:true},{k:"faturas",label:"Tem faturas?",opts:["Sim","Não"]}],
+    rowFmt:r=>(r.ano||"s/ data")+": "+(r.descricao||"obra")+(r.licenca?" · licença: "+r.licenca:"")+(r.faturas?" · faturas: "+r.faturas:"")},
   R("nao_legal","Alguma alteração poderá precisar de ser regularizada?",["Não","Sim","Não sei"],{show:edificio,hint:"Por exemplo: marquise, varanda fechada, ampliação ou anexo. Saber já evita surpresas na escritura."}),
   A("nao_legal_det","Que alterações?",{show:v=>edificio(v)&&["Sim","Não sei"].indexOf(v.nao_legal)>-1}),
-  C("problemas","Há algo sobre o estado do imóvel que convenha saber?",["Humidade ou infiltrações","Instalação elétrica antiga","Canalização","Telhado","Fissuras","Isolamento fraco","Nada de relevante"],{show:edificio,excl:["Nada de relevante"]}),
+  C("problemas","Há algo sobre o estado do imóvel que convenha saber?",["Humidade ou infiltrações","Instalação elétrica antiga","Canalização","Telhado","Fissuras","Isolamento fraco","Outro","Nada de relevante"],{show:edificio,excl:["Nada de relevante"]}),
   A("problemas_det","Pode explicar?",{show:v=>edificio(v)&&Array.isArray(v.problemas)&&v.problemas.length>0&&!has(v,"problemas","Nada de relevante"),hint:"O que existe, desde quando e o que já foi feito."}),
   R("ja_venda","O imóvel já esteve à venda?",["Não","Sim"]),
   A("venda_anterior","Como correu?",{show:v=>v.ja_venda==="Sim",hint:"Durante quanto tempo e porque acha que não se concretizou."}),
-  A("arrendamento","Sobre o arrendamento",{show:v=>v.ocupacao==="Arrendado",hint:"Renda mensal, fim do contrato e se o inquilino sabe da venda."}),
-  C("onus","Existe alguma destas situações?",["Crédito habitação (hipoteca)","Arrendamento em vigor","Usufruto de terceiros","Herança por partilhar","Servidão ou direito de terceiros","Nenhuma","Prefiro falar pessoalmente"],{excl:["Nenhuma","Prefiro falar pessoalmente"],hint:"Serve apenas para preparar a escritura sem atrasos."}),
-  T("imi","IMI anual (aprox.)",{half:true,inputmode:"decimal",ph:"€"}),
-  T("condominio_quota","Condomínio mensal (aprox.)",{half:true,inputmode:"decimal",ph:"€",hint:"Se não existir, deixe em branco."})
+  R("condominio","O imóvel tem condomínio?",["Sim","Não"],{show:edificio}),
+  T("condominio_quota","Valor mensal (aprox.)",{show:v=>edificio(v)&&v.condominio==="Sim",half:true,inputmode:"decimal",ph:"€"}),
+  T("condominio_admin","Administração: nome e contacto",{show:v=>edificio(v)&&v.condominio==="Sim",ph:"Empresa ou administrador",hint:"Útil para combinar o acesso às zonas comuns nas gravações."}),
+  A("condominio_inclui","O que inclui o condomínio?",{rows:2,show:v=>edificio(v)&&v.condominio==="Sim",hint:"Limpeza, elevador, jardim, portaria, seguro… Obras previstas ou quotas extra, se as houver."}),
+  T("imi","IMI anual (aprox.)",{half:true,inputmode:"decimal",ph:"€",hint:"Consta da caderneta predial."})
 ]},
 
-{id:"casa",part:2,title:"O imóvel e a zona",intro:"Os compradores não compram só metros quadrados. Estas respostas ajudam-me a contar a casa como ela merece. Escreva como se estivesse a falar com um amigo.",fields:[
+{id:"acessos",title:"Visitas e acessos",intro:"Para organizar as visitas e as gravações sem lhe tirar tempo.",fields:[
+  R("ocupacao","Neste momento, o imóvel está…",["Habitado por si ou pela família","Devoluto","Arrendado","Segunda habitação","Em obras","Outra situação"],{show:edificio}),
+  A("arrendamento","Sobre o arrendamento",{rows:3,show:v=>v.ocupacao==="Arrendado",hint:"Fim do contrato, se o inquilino sabe da venda e se aceita visitas e gravações."}),
+  R("visitas","Para as visitas, o que funciona melhor?",["Com aviso prévio, a qualquer hora","Só em horários combinados","Com a minha presença","Outra forma"]),
+  C("acesso","Como se entra no imóvel?",["Chave normal","Chave do prédio ou do portão","Código na porta","Comando de portão","Caixa de chaves","Porteiro ou condomínio","Outro"],{hint:"Escolha os que se aplicam."}),
+  A("acesso_det","Como se chega e como se entra?",{rows:3,hint:"Por onde se entra, o andar, que chave abre cada porta. Não escreva códigos de acesso aqui: combinamos pessoalmente."}),
+  T("estac_visitas","Onde podem estacionar os visitantes?",{ph:"Ex.: na rua, em frente ao portão"}),
+  R("animais","Há animais de estimação em casa?",["Não","Sim"]),
+  T("animais_det","Quais, e o que devemos ter em conta nas visitas?",{show:v=>v.animais==="Sim"}),
+  A("peculiaridades","Há alguma particularidade da casa que convenha saber?",{rows:3,hint:"Uma porta que prende, um interruptor pouco óbvio, um degrau… para as visitas correrem sem surpresas."})
+]},
+
+{id:"onde",title:"Onde fica cada coisa",intro:"Respostas curtas chegam: «no corredor, junto à porta». Assim, quem visitar o imóvel encontra tudo sem ter de lhe pedir ajuda.",fields:[
+  T("quadro_eletrico","Onde fica o quadro elétrico?",{show:edificio}),
+  T("agua_geral","Onde fica a torneira de corte geral da água?",{show:edificio}),
+  T("contadores","Onde ficam os contadores de água, luz e gás?",{show:edificio,hint:"E se são individuais ou do prédio."}),
+  R("agua_quente","Como é aquecida a água?",["Esquentador a gás","Caldeira","Termoacumulador elétrico","Bomba de calor","Painéis solares","Outro"],{show:edificio}),
+  T("agua_quente_local","Onde fica o equipamento?",{show:v=>edificio(v)&&!!v.agua_quente}),
+  R("gas","Gás",["Canalizado","Botijas","Sem gás","Outro"],{show:edificio}),
+  A("sistemas","Alarme, estores, portão, rega, ar condicionado… Onde ficam os comandos e como se ligam?",{rows:3,show:edificio,hint:"Só o que existir. Não escreva códigos aqui."}),
+  T("piscina_equip","Piscina: onde fica a casa das máquinas?",{show:v=>has(v,"extras","Piscina")}),
+  T("arrumos","Onde ficam a garagem, a arrecadação e as arrumações?",{show:edificio})
+]},
+
+{id:"video",title:"Vídeo e fotografia",intro:"Para planearmos o dia de gravação com o mínimo de incómodo.",fields:[
+  R("video_hora","Qual é a melhor altura do dia, com mais luz?",["Manhã","Meio do dia","Tarde","Fim da tarde","Depende da divisão","Não sei"],{hint:"Aquela em que a casa está mais bonita."}),
+  A("video_destaques","O que não pode faltar nas imagens?",{rows:3,hint:"Recantos, vistas, detalhes, o que as visitas costumam elogiar."}),
+  A("video_resguardar","Há algo que prefira que não apareça?",{rows:3,hint:"Opcional. Fotografias de família, documentos, objetos de valor… Resguardamos tudo antes de gravar."}),
+  R("video_preparar","A casa está pronta para as imagens?",["Sim, está pronta","Precisa de uma pequena arrumação","Gostava de ajuda a prepará-la"]),
+  R("video_presenca","Quer estar presente na gravação?",["Sim, gosto de acompanhar","Tanto faz","Prefiro não estar"]),
+  T("video_dias","Que dias ou horários lhe convêm?",{ph:"Ex.: terças e quintas de manhã",hint:"Ou diga-me os que não lhe dão jeito."})
+]},
+
+{id:"casa",title:"O imóvel e a zona",intro:"Os compradores não compram só metros quadrados. Estas respostas ajudam-me a contar a casa como ela merece, nos vídeos e nas visitas. Escreva como se estivesse a falar com um amigo.",fields:[
   A("gosta_mais","O que mais gosta neste imóvel?"),
   A("melhor_momento","Qual é o melhor momento do dia aqui?",{hint:"Onde está, o que vê, o que sente."}),
   A("memorias","Há alguma memória ou história que a casa guarde?",{hint:"Opcional: só se quiser partilhar."}),
   A("para_quem","Que tipo de família ou pessoa imagina feliz aqui?"),
-  C("mais_valias","O que mais valoriza?",["Localização","Luz natural","Vistas desafogadas","Silêncio","Exposição solar","Estacionamento fácil","Jardim / exteriores","Cozinha renovada","Divisões amplas","Muitas arrumações","Bons acabamentos","Eficiência energética","Perto de transportes","Potencial de ampliação","Boa vizinhança"],{hint:"Escolha os que se aplicam."}),
+  C("mais_valias","O que mais valoriza?",["Localização","Luz natural","Vistas desafogadas","Silêncio","Exposição solar","Estacionamento fácil","Jardim / exteriores","Cozinha renovada","Divisões amplas","Muitas arrumações","Bons acabamentos","Eficiência energética","Perto de transportes","Potencial de ampliação","Boa vizinhança","Outro"],{hint:"Escolha os que se aplicam."}),
   A("diferencial","O que o torna diferente dos outros da mesma zona?"),
-  C("menos_valias","E o que poderia ser melhor?",["Falta de estacionamento","Precisa de obras","Pouca luz natural","Divisões pequenas","Sem elevador","Sem exterior","Cozinha ou casas de banho antigas","Condomínio elevado","Acessos difíceis","Longe de serviços"],{hint:"Uma visão franca ajuda-me a preparar o imóvel e a antecipar as perguntas dos compradores."}),
+  C("menos_valias","E o que poderia ser melhor?",["Falta de estacionamento","Precisa de obras","Pouca luz natural","Divisões pequenas","Sem elevador","Sem exterior","Cozinha ou casas de banho antigas","Condomínio elevado","Acessos difíceis","Longe de serviços","Outro"],{hint:"Uma visão franca ajuda-me a preparar o imóvel e a antecipar as perguntas dos compradores."}),
   A("objecoes","Que comentários já ouviu de quem o visitou?",{hint:"Opcional."}),
-  R("ambiente","Como descreve o ambiente da zona?",["Residencial e calmo","Misto","Central e animado","Rural / isolado"]),
-  C("servicos","O que existe perto?",["Escolas","Supermercado","Farmácia","Centro de saúde / hospital","Cafés e restaurantes","Parques e jardins","Praia","Comboio / metro","Autocarro","Acesso rápido a autoestrada"]),
+  R("ambiente","Como descreve o ambiente da zona?",["Residencial e calmo","Misto","Central e animado","Rural / isolado","Outro"]),
+  C("servicos","O que existe perto?",["Escolas","Supermercado","Farmácia","Centro de saúde / hospital","Cafés e restaurantes","Parques e jardins","Praia","Comboio / metro","Autocarro","Acesso rápido a autoestrada","Outro"]),
   A("zona_desc","Fale-me da zona e da vizinhança",{hint:"Do que mais gosta e o que costuma dizer a quem pergunta."}),
-  C("alertas","Há algo na envolvente a ter em conta?",["Ruído","Trânsito","Zona inundável","Obras ou projetos previstos","Linhas de alta tensão","Nada de relevante"],{excl:["Nada de relevante"]})
+  C("alertas","Há algo na envolvente a ter em conta?",["Ruído","Trânsito","Zona inundável","Obras ou projetos previstos","Linhas de alta tensão","Outro","Nada de relevante"],{excl:["Nada de relevante"]})
 ]},
 
-{id:"docs",part:2,kind:"docs",section:"Documentos",title:"Documentos (opcional)",intro:"Tudo opcional. Pode carregar PDF ou fotografias (até __MAXMB__ MB cada). Se não tiver algum documento, marque «Não tenho / preciso de ajuda» e falamos sobre isso. Não envie aqui documentos de identificação (CC, NIF): tratamos disso presencialmente, na assinatura do contrato.",fields:[
+{id:"docs",kind:"docs",section:"Documentos",title:"Documentos (opcional)",intro:"Tudo opcional. Pode carregar PDF ou fotografias (até __MAXMB__ MB cada). Se não tiver algum documento, marque «Não tenho / preciso de ajuda» e falamos sobre isso. Não envie aqui documentos de identificação (CC, NIF).",fields:[
   T("certidao_codigo","Código de acesso da certidão permanente",{ph:"0000-0000-0000",hint:"Se tiver este código, consigo consultar a certidão online, sem precisar do documento."})
 ]},
 
-{id:"final",part:2,kind:"final",section:"Últimos detalhes",title:"Últimos detalhes",intro:"Quase pronto: três perguntas rápidas e é só enviar.",fields:[
-  R("visitas","Para as visitas, o que funciona melhor?",["Com aviso prévio, a qualquer hora","Só em horários combinados","Com a minha presença"]),
-  C("divulgacao","O que gostaria na divulgação?",["Fotografia profissional","Vídeo","Drone","Tour virtual 360°"]),
-  R("morada_div","Divulgação da localização",["Morada exata","Apenas a zona","Prefiro falar sobre isto"]),
-  D("como_conheceu","Como me conheceu?",["Redes sociais","Recomendação de alguém","Anúncio","Placa na rua","Pesquisa na internet","Outro"]),
+{id:"final",kind:"final",section:"Últimos detalhes",title:"Últimos detalhes",intro:"Quase pronto: duas últimas perguntas e é só enviar.",fields:[
+  R("morada_div","Na divulgação, como prefere indicar a localização?",["Morada exata","Apenas a zona","Prefiro falar sobre isto"]),
   A("notas_finais","Há mais alguma coisa que devesse saber?",{rows:4})
 ]}
 ];
@@ -365,8 +385,8 @@ const DOCS=[
 /* =====================================================================
    ESTADO
    ===================================================================== */
-const KEY="fichaImovel.v2";
-const S={v:{},nao:{},files:{},stepId:"sobre",sid:null,folderId:null,enviado:null,up:{},consent:false,busy:false};
+const KEY="fichaImovel.v3";
+const S={v:{},nao:{},files:{},stepId:"inicio",sid:null,folderId:null,enviado:null,up:{},consent:false,busy:false};
 let wraps={};
 
 const $=(s,r)=>(r||document).querySelector(s);
@@ -413,27 +433,35 @@ function stepStats(st){
   st.fields.forEach(f=>{if(!isVis(f,st))return;t++;if(answered(f))a++;});
   return{a:a,t:t};
 }
-function totals(parte){
+function totals(){
   let a=0,t=0;
   visibleSteps().forEach(st=>{
-    if(st.kind==="docs"||st.kind==="final"||st.kind==="checkpoint")return;
-    if(parte==="essencial"&&st.part!==1)return;
-    const s=stepStats(st);a+=s.a;t+=s.t;
+    if(st.kind==="docs"||st.kind==="final")return;
+    const x=stepStats(st);a+=x.a;t+=x.t;
   });
   return{a:a,t:t};
 }
 function pos(st){
-  const real=visibleSteps().filter(s=>s.kind!=="checkpoint");
-  const inPart=real.filter(s=>s.part===st.part);
-  if(st.kind==="checkpoint")return{label:"O essencial · concluído",pct:Math.round(inPart.length/real.length*100)};
-  const i=real.indexOf(st),j=inPart.indexOf(st);
-  return{label:(st.part===1?"O essencial":"Os detalhes")+" · "+(j+1)+" de "+inPart.length,pct:Math.round((i+1)/real.length*100)};
+  const real=visibleSteps();
+  const i=Math.max(0,real.indexOf(st));
+  return{label:(i+1)+" de "+real.length,pct:Math.round((i+1)/real.length*100)};
 }
-const partLabel=st=>"Parte "+st.part+" de 2 · "+(st.part===1?"O essencial":"Os detalhes");
+const partLabel=st=>{const real=visibleSteps();return "Passo "+(Math.max(0,real.indexOf(st))+1)+" de "+real.length;};
 
 /* =====================================================================
    RENDER DE CAMPOS
    ===================================================================== */
+function makeQual(f,lid){
+  const oo=outroOf(f);
+  if(!oo)return{exists:false,on:()=>false,show:()=>{},wrap:null,input:null};
+  const input=el("input",{class:"in",id:lid+"_outro",type:"text",placeholder:"Escreva aqui…",autocomplete:"off",enterkeyhint:"next","aria-label":"Qual? ("+f.label+")","data-outro-for":f.id});
+  input.value=S.v[OK(f)]||"";
+  input.addEventListener("input",function(){if(input.value.trim())S.v[OK(f)]=input.value.trim();else delete S.v[OK(f)];changed();});
+  const wrap=el("div",{class:"outro","data-outro":f.id},el("label",{class:"lbl sm",for:lid+"_outro"},"Qual?"),input);
+  const on=function(){const v=S.v[f.id];return Array.isArray(v)?v.indexOf(oo)>-1:v===oo;};
+  return{exists:true,on:on,show:function(x){wrap.hidden=!x;},wrap:wrap,input:input};
+}
+
 function renderField(f){
   const wrap=el("div",{class:"field"+((f.type==="number"||f.half)?" half":""),"data-fid":f.id});
   const lid="f_"+f.id;
@@ -455,12 +483,21 @@ function renderField(f){
     sel.append(el("option",{value:""},"Selecione…"));
     f.opts.forEach(o=>sel.append(el("option",{value:o},o)));
     sel.value=cur||"";
-    sel.addEventListener("change",function(){if(sel.value)S.v[f.id]=sel.value;else delete S.v[f.id];changed();});
+    const q=makeQual(f,lid);
+    sel.addEventListener("change",function(){
+      if(sel.value)S.v[f.id]=sel.value;else delete S.v[f.id];
+      const on=q.on(),was=q.exists&&!q.wrap.hidden;
+      if(q.exists){q.show(on);if(!on){delete S.v[OK(f)];q.input.value="";}}
+      changed();
+      if(on&&!was)q.input.focus();
+    });
     wrap.append(sel);
+    if(q.exists){q.show(q.on());wrap.append(q.wrap);}
   }else if(f.type==="radio"||f.type==="chips"){
     const multi=f.type==="chips";
     const grp=el("div",{class:"opts",role:multi?"group":"radiogroup","aria-labelledby":lid+"_l"});
     const btns=[];
+    const q=makeQual(f,lid);
     const sync=function(){
       const val=S.v[f.id];
       btns.forEach(function(b){
@@ -483,11 +520,16 @@ function renderField(f){
         }else{
           if(S.v[f.id]===o)delete S.v[f.id];else S.v[f.id]=o;
         }
-        sync();changed();
+        sync();
+        const on=q.on(),was=q.exists&&!q.wrap.hidden;
+        if(q.exists){q.show(on);if(!on){delete S.v[OK(f)];q.input.value="";}}
+        changed();
+        if(on&&!was)q.input.focus();
       }},o);
       btns.push(b);grp.append(b);
     });
     sync();wrap.append(grp);
+    if(q.exists){q.show(q.on());wrap.append(q.wrap);}
   }else if(f.type==="repeater"){
     renderRepeater(f,wrap);
   }else{
@@ -596,12 +638,12 @@ async function shrinkImage(file){
 }
 
 /* consentimento (usado no ponto de controlo e no passo final) */
-function consentBox(extra){
+function consentBox(){
   const box=el("section",{class:"card","data-consent":"1"});
   const cb=el("input",{type:"checkbox",id:"consent"});
   cb.checked=S.consent;
   cb.addEventListener("change",function(){S.consent=cb.checked;const m=$("#consentMsg");if(m&&cb.checked)m.hidden=true;persist();});
-  box.append(el("label",{class:"consent",for:"consent"},cb,el("span",null,"Li e aceito que os meus dados e documentos sejam tratados por "+CONFIG.consultor+" para avaliar o imóvel, preparar a sua venda e contactar-me sobre esse processo. ",el("span",{class:"req",style:"color:var(--gold-d)"},"*"))));
+  box.append(el("label",{class:"consent",for:"consent"},cb,el("span",null,"Li e aceito que os meus dados e documentos sejam tratados por "+CONFIG.consultor+" para preparar a divulgação e a venda do imóvel (fotografia, vídeo e visitas) e contactar-me sobre esse processo. ",el("span",{class:"req",style:"color:var(--gold-d)"},"*"))));
   box.append(el("div",{class:"msg",id:"consentMsg",role:"alert",hidden:true},"Para enviar, é necessário aceitar o tratamento dos dados."));
   const contacto=[CONFIG.telefone?"pelo "+CONFIG.telefone:"",CONFIG.email?"por "+CONFIG.email:""].filter(Boolean).join(" ou ");
   const legal=el("p",{class:"legal"},"Os dados ficam em acesso restrito e só são utilizados para este fim. Informação sobre o imóvel poderá ser partilhada com potenciais compradores no âmbito da venda. Pode pedir o acesso, a retificação ou a eliminação dos seus dados a qualquer momento"+(contacto?", contactando-me "+contacto:"")+". ");
@@ -610,37 +652,19 @@ function consentBox(extra){
   box.append(el("div",{class:"hp","aria-hidden":"true"},el("label",null,"Não preencher",el("input",{type:"text",id:"hp",tabindex:"-1",autocomplete:"off"}))));
   box.append(el("div",{id:"finalBanner"}));
   if(!CONFIG.endpoint)box.append(el("div",{class:"banner warn"},"Pré-visualização: a ligação ao Google ainda não está configurada, por isso, ao enviar, as respostas serão apenas descarregadas para este dispositivo."));
-  if(extra)box.append(extra);
   return box;
-}
-
-/* ponto de controlo: essencial concluído */
-function checkpointIntro(){
-  const t=totals("essencial");
-  return "Respondeu a "+t.a+" de "+t.t+" perguntas. "+(S.enviado?"O essencial já foi enviado; pode acrescentar os detalhes quando quiser.":"Obrigado: já tenho o essencial para começar. Pode enviar agora e falamos em breve, ou dedicar mais uns 10 minutos aos detalhes — quanto mais eu souber do imóvel, melhor o consigo valorizar.");
-}
-function renderCheckpoint(){
-  const frag=el("div");
-  const cont=el("button",{type:"button",class:"btn"+(S.enviado?" gold":""),id:"cont",onclick:function(){const steps=visibleSteps();const i=steps.findIndex(s=>s.id==="essencial");goTo(steps[i+1].id);}},"Continuar com os detalhes");
-  if(S.enviado){
-    frag.append(el("div",{class:"actions",style:"margin:0 0 18px"},cont));
-  }else{
-    const send=el("button",{type:"button",class:"btn gold",id:"sendEss",onclick:function(){submit("essencial");}},"Enviar o essencial");
-    frag.append(consentBox(el("div",{class:"actions",style:"margin-top:14px"},send,cont)));
-  }
-  return frag;
 }
 
 /* passo final */
 function renderFinal(){
   const frag=el("div");
   const sum=el("section",{class:"card"});
-  const t=totals("completa");
+  const t=totals();
   sum.append(el("h3",null,"Resumo"),el("p",{class:"big"},t.a+" de "+t.t+" perguntas respondidas"),
     el("p",{class:"legal",style:"margin:4px 0 0"},"Não faz mal se ficarem perguntas por responder: podemos completar tudo numa conversa."));
   const ul=el("ul",{class:"sum"});
   visibleSteps().forEach(function(st){
-    if(st.kind==="final"||st.kind==="checkpoint")return;
+    if(st.kind==="final")return;
     const s=stepStats(st);
     const nFiles=Object.keys(S.files).reduce((a,k)=>a+S.files[k].length,0);
     const c=st.kind==="docs"?(nFiles+(nFiles===1?" ficheiro":" ficheiros")+" · "+s.a+" de "+s.t):(s.a+" de "+s.t);
@@ -670,20 +694,18 @@ function renderStep(back){
   host.replaceChildren();
   const card=el("section",{class:"card step"+(back?" back":""),"aria-labelledby":"stepTitle"});
   card.append(el("p",{class:"eyebrow"},partLabel(st)),el("h2",{id:"stepTitle",tabindex:"-1"},st.title));
-  const txt=st.kind==="checkpoint"?checkpointIntro():st.intro;
-  if(txt)card.append(el("p",{class:"intro"},txt));
+  if(st.intro)card.append(el("p",{class:"intro"},st.intro));
   const box=el("div",{class:"fields"});
   st.fields.forEach(function(f){const w=renderField(f);wraps[f.id]=w;box.append(w);});
   if(st.fields.length)card.append(box);
   host.append(card);
   if(st.kind==="docs")host.append(renderDocs());
-  if(st.kind==="checkpoint")host.append(renderCheckpoint());
   if(st.kind==="final")host.append(renderFinal());
   applyShow();
   updateProgress();
   btnPrev.hidden=(i===0);
-  btnNext.hidden=(st.kind==="checkpoint");
-  btnNext.textContent=st.kind==="final"?(S.enviado?"Enviar detalhes":"Enviar ficha"):"Seguinte";
+  btnNext.hidden=false;
+  btnNext.textContent=st.kind==="final"?"Enviar ficha":"Seguinte";
   btnNext.classList.toggle("gold",st.kind==="final");
 }
 function applyShow(){
@@ -733,7 +755,7 @@ function scrollToEl(n){const y=n.getBoundingClientRect().top+window.pageYOffset-
 
 btnNext.addEventListener("click",function(){
   const steps=visibleSteps();const i=steps.findIndex(s=>s.id===S.stepId);const st=steps[i];
-  if(st.kind==="final"){submit("completa");return;}
+  if(st.kind==="final"){submit();return;}
   const bad=validateStep(st);
   if(bad){scrollToEl(bad);return;}
   goTo(steps[i+1].id);
@@ -769,16 +791,17 @@ function startForm(){
 /* =====================================================================
    ENVIO
    ===================================================================== */
+function fmtOpt(f,o){const t=S.v[OK(f)];return(isOutro(o)&&t)?o+": "+t:o;}
 function fmtVal(f,v){
   if(f.type==="repeater")return v.filter(r=>Object.keys(r).length).map(f.rowFmt).join("\n");
-  if(Array.isArray(v))return v.join(", ");
+  if(Array.isArray(v))return v.map(o=>fmtOpt(f,o)).join(", ");
+  if(f.opts)return fmtOpt(f,String(v));
   return String(v)+(f.unit?" "+f.unit:"");
 }
-function buildPayload(parte){
+function buildPayload(){
+  const parte="completa";
   const sections=[];
   visibleSteps().forEach(function(st){
-    if(st.kind==="checkpoint")return;
-    if(parte==="essencial"&&st.part!==1)return;
     const items=[];
     st.fields.forEach(function(f){if(isVis(f,st)&&answered(f))items.push({label:f.label,value:fmtVal(f,S.v[f.id])});});
     if(st.kind==="docs"){
@@ -791,12 +814,12 @@ function buildPayload(parte){
     }
     if(items.length)sections.push({title:st.section||st.title,items:items});
   });
-  const v=S.v,t=totals(parte);
+  const v=S.v,t=totals();
   return{
-    action:"submit",id:S.sid,versao:2,parte:parte,enviadoEm:new Date().toISOString(),
+    action:"submit",id:S.sid,versao:3,parte:parte,enviadoEm:new Date().toISOString(),
     fields:{nome:v.nome||"",telemovel:v.telemovel||"",email:v.email||"",
-      tipo:v.tipo_imovel==="Outro"?(v.tipo_outro||"Outro"):(v.tipo_imovel||""),
-      concelho:v.concelho||"",freguesia:v.freguesia||"",morada:v.morada||"",preco:v.preco_esperado||"",prazo:v.prazo||""},
+      tipo:v.tipo_imovel==="Outro"?(v.tipo_imovel__outro||"Outro"):(v.tipo_imovel||""),
+      concelho:v.concelho||"",freguesia:v.freguesia||"",morada:v.morada||""},
     respondidas:t.a,total:t.t,ficheiros:flatFiles().length,sections:sections
   };
 }
@@ -828,7 +851,8 @@ function downloadBackup(payload){
 }
 function waLink(txt){return CONFIG.whatsapp?"https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent(txt):null;}
 
-async function submit(parte){
+async function submit(){
+  const parte="completa";
   if(S.busy)return;
   const badStep=firstInvalidStep();
   if(badStep){
@@ -839,10 +863,10 @@ async function submit(parte){
   if(!S.consent){const m=$("#consentMsg");if(m){m.hidden=false;scrollToEl(m);}return;}
   const hp=$("#hp");if(hp&&hp.value){clearDraft();showDone({});return;}
   if(!S.sid){S.sid=uid();persist();}
-  const payload=buildPayload(parte);
+  const payload=buildPayload();
   setBusy(true,"A enviar…");
   try{
-    if(!CONFIG.endpoint){downloadBackup(payload);setBusy(false);showDone({preview:true,parte:parte});return;}
+    if(!CONFIG.endpoint){downloadBackup(payload);setBusy(false);showDone({preview:true});return;}
     if(!S.folderId||S.enviado!==parte){const r=await post(payload);S.folderId=r.folderId;S.enviado=parte;persist();}
     const queue=flatFiles().filter(q=>!S.up[q.key]);
     const fail=[];let n=0;
@@ -854,20 +878,19 @@ async function submit(parte){
       }catch(e){fail.push(q.file.name);}
     }
     setBusy(false);
-    if(fail.length){showFinalError("A ficha foi enviada, mas não foi possível enviar "+(fail.length===1?"este ficheiro":"estes ficheiros")+": "+fail.join(", ")+".",payload,parte);return;}
-    if(parte==="essencial"){persist();showDone({parte:"essencial"});return;}
+    if(fail.length){showFinalError("A ficha foi enviada, mas não foi possível enviar "+(fail.length===1?"este ficheiro":"estes ficheiros")+": "+fail.join(", ")+".",payload);return;}
     clearDraft();showDone({});
   }catch(e){
     setBusy(false);
-    showFinalError("Não foi possível enviar neste momento. As suas respostas continuam guardadas neste dispositivo.",payload,parte);
+    showFinalError("Não foi possível enviar neste momento. As suas respostas continuam guardadas neste dispositivo.",payload);
   }
 }
-function showFinalError(text,payload,parte){
+function showFinalError(text,payload){
   const b=$("#finalBanner");if(!b)return;
   b.replaceChildren();
   const box=el("div",{class:"banner err",role:"alert"},el("strong",null,"Atenção. "),text);
   const row=el("div",{class:"actions",style:"margin-top:12px"});
-  row.append(el("button",{type:"button",class:"btn sm",onclick:function(){submit(parte);}},"Tentar novamente"));
+  row.append(el("button",{type:"button",class:"btn sm",onclick:function(){submit();}},"Tentar novamente"));
   row.append(el("button",{type:"button",class:"btn ghost sm",onclick:function(){downloadBackup(payload);}},"Descarregar cópia das respostas"));
   const w=waLink("Olá, "+CONFIG.consultor.split(" ")[0]+". Preenchi a ficha do imóvel mas houve um problema no envio. O meu nome é "+(S.v.nome||"")+".");
   if(w)row.append(el("a",{class:"btn ghost sm",href:w,target:"_blank",rel:"noopener",style:"text-decoration:none"},"Avisar por WhatsApp"));
@@ -883,18 +906,12 @@ function showDone(o){
   doneEl.append(el("h1",null,first?"Obrigado, "+first+".":"Obrigado."));
   if(o.preview){
     doneEl.append(el("div",{class:"banner warn"},"Pré-visualização: as respostas não foram enviadas porque a ligação ao Google ainda não está configurada. Foi descarregada uma cópia para este dispositivo."));
-  }else if(o.parte==="essencial"){
-    doneEl.append(el("p",{class:"lead"},"Recebi o essencial e já posso começar a preparar-me. Entro em contacto consigo muito em breve."));
-    doneEl.append(el("p",{class:"intro"},"Se quiser, pode agora acrescentar os detalhes: demora cerca de 10 minutos e ajuda-me a valorizar melhor o imóvel."));
   }else{
-    doneEl.append(el("p",{class:"lead"},"Recebi a sua ficha. Vou analisá-la com atenção e entro em contacto consigo muito em breve."));
+    doneEl.append(el("p",{class:"lead"},"Recebi a sua ficha. Com estas informações já consigo preparar a gravação dos vídeos e as visitas sem lhe tirar mais tempo. Falamos em breve."));
   }
   const acts=el("div",{class:"actions",style:"margin-top:18px"});
-  if(o.parte==="essencial"){
-    acts.append(el("button",{type:"button",class:"btn",id:"more",onclick:function(){S.stepId="espacos";startForm();}},"Acrescentar detalhes"));
-  }
   const w=waLink("Olá, "+CONFIG.consultor.split(" ")[0]+". Acabei de preencher a ficha do imóvel.");
-  if(w)acts.append(el("a",{class:"btn "+(o.parte==="essencial"?"ghost":"gold"),href:w,target:"_blank",rel:"noopener",style:"text-decoration:none;display:inline-flex;align-items:center"},"Falar por WhatsApp"));
+  if(w)acts.append(el("a",{class:"btn gold",href:w,target:"_blank",rel:"noopener",style:"text-decoration:none;display:inline-flex;align-items:center"},"Falar por WhatsApp"));
   if(CONFIG.instagram)acts.append(el("a",{class:"btn ghost",href:"https://instagram.com/"+CONFIG.instagram,target:"_blank",rel:"noopener",style:"text-decoration:none;display:inline-flex;align-items:center"},"@"+CONFIG.instagram));
   doneEl.append(acts);
   window.scrollTo(0,0);
@@ -911,11 +928,11 @@ function init(){
   STEPS.forEach(s=>{if(s.intro)s.intro=s.intro.replace("__MAXMB__",CONFIG.maxFicheiroMB);});
   const d=loadDraft();
   if(d&&d.v&&Object.keys(d.v).length){
-    S.v=d.v;S.nao=d.nao||{};S.stepId=d.stepId||"sobre";S.sid=d.sid||null;S.folderId=d.folderId||null;S.enviado=d.enviado||null;S.consent=!!d.consent;
+    S.v=d.v;S.nao=d.nao||{};S.stepId=d.stepId||"inicio";S.sid=d.sid||null;S.folderId=d.folderId||null;S.enviado=d.enviado||null;S.consent=!!d.consent;
     $("#resume").hidden=false;
     $("#resume").addEventListener("click",startForm);
     $("#start").textContent="Começar de novo";
-    $("#start").addEventListener("click",function(){S.v={};S.nao={};S.stepId="sobre";S.sid=null;S.folderId=null;S.enviado=null;S.consent=false;clearDraft();startForm();});
+    $("#start").addEventListener("click",function(){S.v={};S.nao={};S.stepId="inicio";S.sid=null;S.folderId=null;S.enviado=null;S.consent=false;clearDraft();startForm();});
   }else{
     $("#start").addEventListener("click",startForm);
   }
