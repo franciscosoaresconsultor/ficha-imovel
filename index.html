@@ -1,0 +1,928 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0b2447">
+<meta name="description" content="Ficha do imóvel · Francisco Soares, Consultor Imobiliário">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_PT">
+<meta property="og:title" content="Ficha do imóvel · Francisco Soares">
+<meta property="og:description" content="Vamos conhecer a sua casa. Cerca de 5 minutos para o essencial.">
+<meta property="og:image" content="https://franciscosoaresconsultor.github.io/ficha-imovel/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://franciscosoaresconsultor.github.io/ficha-imovel/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Ficha do Imóvel">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Ficha do Imóvel · Francisco Soares</title>
+<style>
+:root{
+  --navy:#0b2447; --blue:#19376d; --mid:#4f64b0; --silver:#c8d1de; --mist:#eef2f7; --line:#d5dce7;
+  --ink:#1c2433; --muted:#5d6b82; --gold:#b8975a; --gold-d:#8f7239; --err:#b3261e; --ok:#1f7a4d; --r:16px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--mist);min-height:100vh;min-height:100dvh}
+h1,h2,h3{font-family:Georgia,"Iowan Old Style","Times New Roman",serif;font-weight:600;color:var(--navy);line-height:1.2;margin:0}
+button,input,select,textarea{font:inherit;color:inherit;touch-action:manipulation}
+[hidden]{display:none!important}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+
+/* cabeçalho (muda para barra de app durante o preenchimento) */
+.hero{background:linear-gradient(160deg,var(--navy),var(--blue));color:#fff;padding:calc(20px + env(safe-area-inset-top)) 0 22px;border-bottom:3px solid var(--gold);position:relative}
+.hero-in{display:flex;align-items:center;gap:16px}
+.avatar{flex:none;width:78px;height:78px;border-radius:50%;background:#10305f;border:2px solid var(--gold);overflow:hidden;transition:width .25s,height .25s}
+.avatar img{width:100%;height:100%;display:block;object-fit:cover}
+.hero .name{font-family:Georgia,"Times New Roman",serif;font-size:1.3rem;margin:0;line-height:1.2}
+.hero .role{margin:3px 0 0;font-size:.92rem;opacity:.88}
+.prog{margin:0 0 0 auto;font-size:.8rem;color:#e3cd9c;text-align:right;line-height:1.25;font-weight:600;white-space:nowrap}
+.bar{height:3px;background:rgba(255,255,255,.16);position:absolute;left:0;right:0;bottom:0}
+.bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#ecd9a8);transition:width .35s}
+body.inform .hero{position:sticky;top:0;z-index:6;padding:calc(8px + env(safe-area-inset-top)) 0 10px;border-bottom:0;box-shadow:0 2px 12px rgba(11,36,71,.18)}
+body.inform .avatar{width:38px;height:38px;border-width:1.5px}
+body.inform .hero .name{font-size:1rem}
+body.inform .hero .role{display:none}
+
+/* cartões */
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:26px;margin:18px 0;box-shadow:0 1px 2px rgba(11,36,71,.04),0 10px 28px rgba(11,36,71,.05)}
+@media(max-width:560px){.card{padding:20px 18px}}
+.card h1{font-size:1.9rem;margin-bottom:10px}
+.card h2{font-size:1.5rem;margin-bottom:8px}
+.card h3{font-size:1.15rem;margin-bottom:6px}
+.eyebrow{margin:0 0 8px;font-size:.74rem;letter-spacing:.13em;text-transform:uppercase;color:var(--gold-d);font-weight:700}
+.lead{font-size:1.06rem;color:#2d3a52;margin:0 0 16px}
+.intro{color:var(--muted);margin:0 0 22px}
+.ticks{list-style:none;padding:0;margin:0 0 22px}
+.ticks li{position:relative;padding:0 0 10px 28px}
+.ticks li:before{content:"";position:absolute;left:3px;top:.5em;width:12px;height:7px;border-left:2px solid var(--gold);border-bottom:2px solid var(--gold);transform:rotate(-45deg)}
+.actions{display:flex;flex-wrap:wrap;gap:12px}
+.step{animation:in .28s ease both}
+.step.back{animation-name:inb}
+@keyframes in{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+@keyframes inb{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:none}}
+
+/* campos */
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.field{grid-column:1/-1;margin:0 0 22px;min-width:0}
+.field.half{grid-column:auto}
+.lbl{display:block;font-weight:600;margin:0 0 4px}
+.lbl.sm{font-size:.86rem;font-weight:600;color:#33425c}
+.lbl .req{color:var(--gold-d)}
+.hint{display:block;font-size:.86rem;color:var(--muted);margin:0 0 8px;font-weight:400;line-height:1.45}
+.in{width:100%;min-height:48px;padding:12px 14px;border:1px solid #c3cddb;border-radius:12px;background:#fff;-webkit-appearance:none;appearance:none}
+textarea.in{min-height:96px;resize:vertical;line-height:1.5}
+select.in{padding-right:38px;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 20px) 55%,calc(100% - 14px) 55%;background-size:6px 6px,6px 6px;background-repeat:no-repeat}
+.in:focus{outline:2px solid var(--mid);outline-offset:1px;border-color:var(--mid)}
+.inwrap{position:relative}
+.inwrap .in{padding-right:44px}
+.suffix{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;font-size:.9rem}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{border:1px solid #c3cddb;background:#fff;border-radius:999px;padding:10px 16px;min-height:44px;cursor:pointer;line-height:1.2;transition:background .15s,color .15s,border-color .15s,transform .1s}
+.opt:active{transform:scale(.97)}
+.opt:hover{border-color:var(--blue)}
+.opt[aria-checked=true],.opt[aria-pressed=true]{background:var(--navy);border-color:var(--navy);color:#fff}
+.opt:focus-visible,.btn:focus-visible,.link:focus-visible{outline:2px solid var(--mid);outline-offset:2px}
+.msg{color:var(--err);font-size:.86rem;margin-top:6px}
+.field.bad .in{border-color:var(--err)}
+.field.bad .lbl{color:var(--err)}
+
+/* botões */
+.btn{border:0;border-radius:14px;padding:13px 24px;min-height:48px;font-weight:600;cursor:pointer;background:var(--navy);color:#fff;transition:background .15s,transform .1s}
+.btn:active{transform:scale(.98)}
+.btn:hover{background:var(--blue)}
+.btn.ghost{background:#fff;color:var(--navy);border:1px solid var(--navy)}
+.btn.ghost:hover{background:var(--mist)}
+.btn.gold{background:var(--gold);color:#1b1405}
+.btn.gold:hover{background:#c8a869}
+.btn.sm{padding:9px 16px;min-height:40px;font-size:.92rem}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+.link{background:none;border:0;padding:0;color:var(--blue);text-decoration:underline;cursor:pointer;font-size:.88rem}
+
+/* navegação */
+.nav{position:sticky;bottom:0;z-index:5;background:rgba(255,255,255,.95);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-top:1px solid var(--line);padding:12px 0 calc(12px + env(safe-area-inset-bottom))}
+.nav .in-nav{max-width:760px;margin:0 auto;padding:0 16px;display:flex;gap:12px;justify-content:space-between;align-items:center}
+.save{font-size:.78rem;color:var(--muted);text-align:center;flex:1;line-height:1.3}
+.nav .btn{min-width:112px}
+
+/* repetidor (obras) */
+.rep-row{border:1px solid var(--line);border-radius:12px;padding:14px;margin:0 0 12px;background:#fafbfd}
+.rep-title{display:flex;justify-content:space-between;align-items:center;font-weight:600;margin-bottom:10px;color:var(--navy)}
+.rep-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px}
+.rep-f.wide{grid-column:1/-1}
+@media(max-width:420px){.rep-grid{grid-template-columns:1fr}}
+
+/* documentos */
+.slot{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:0 0 12px;background:#fff}
+.slot h4{margin:0 0 2px;font-size:1rem;color:var(--navy)}
+.slot .hint{margin-bottom:10px}
+.slot .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.files{list-style:none;margin:10px 0 0;padding:0}
+.files li{display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:.9rem;padding:6px 0;border-top:1px solid #eef1f6}
+.files li span.n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.files li span.s{color:var(--muted);white-space:nowrap;font-size:.82rem}
+
+/* resumo / consentimento */
+.sum{list-style:none;margin:12px 0 0;padding:0}
+.sum li{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid #eef1f6}
+.sum li>span:first-child{flex:1;min-width:0}
+.sum .c{color:var(--muted);font-size:.84rem;text-align:right}
+.sum li .link{flex:none}
+.big{font-size:1.1rem;font-weight:600;color:var(--navy);margin:0}
+.consent{display:flex;gap:12px;align-items:flex-start;cursor:pointer;margin:6px 0 10px}
+.consent input{flex:none;width:22px;height:22px;margin-top:2px;accent-color:var(--navy)}
+.legal{font-size:.82rem;color:var(--muted);line-height:1.5}
+.banner{border-radius:12px;padding:14px 16px;margin:14px 0;font-size:.94rem}
+.banner.warn{background:#fff6e5;border:1px solid #ecd49a;color:#5b4310}
+.banner.err{background:#fdecea;border:1px solid #f1b8b3;color:#7a1710}
+.hp{position:absolute!important;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+/* fim */
+.okmark{width:64px;height:64px;border-radius:50%;background:var(--navy);display:grid;place-items:center;margin:0 0 16px;border:2px solid var(--gold)}
+.okmark svg{width:30px;height:30px}
+.overlay{position:fixed;inset:0;z-index:20;background:rgba(11,36,71,.72);display:grid;place-items:center;padding:24px}
+.overlay .box{background:#fff;border-radius:16px;padding:26px 28px;max-width:360px;text-align:center}
+.spin{width:34px;height:34px;border:3px solid #d9e0ea;border-top-color:var(--gold);border-radius:50%;margin:0 auto 14px;animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+footer{padding:8px 0 40px;text-align:center;font-size:.8rem;color:var(--muted)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="hero" id="hero">
+  <div class="wrap hero-in">
+    <div class="avatar"><img alt="" src="data:image/webp;base64,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"></div>
+    <div>
+      <p class="name" id="hName"></p>
+      <p class="role" id="hRole"></p>
+    </div>
+    <p class="prog" id="topLabel" hidden></p>
+  </div>
+  <div class="bar" id="bar" hidden><i id="topBar"></i></div>
+</header>
+
+<main>
+  <div class="wrap">
+    <noscript><div class="card">Para preencher a ficha, ative o JavaScript no seu navegador.</div></noscript>
+
+    <section id="intro" class="card">
+      <p class="eyebrow">Ficha do imóvel</p>
+      <h1>Vamos conhecer a sua casa</h1>
+      <p class="lead">Quanto melhor eu conhecer o imóvel — o que tem, a sua história e o que o torna especial —, melhor o consigo apresentar e valorizar.</p>
+      <ul class="ticks">
+        <li>Primeiro o essencial, em cerca de 5 minutos. Depois, se quiser, os detalhes: mais uns 10.</li>
+        <li>Quase tudo é opcional. Só o contacto e a localização do imóvel são obrigatórios; o que não souber, falamos juntos.</li>
+        <li>Pode parar quando quiser: o progresso fica guardado neste dispositivo.</li>
+      </ul>
+      <div class="actions">
+        <button type="button" id="start" class="btn gold">Começar</button>
+        <button type="button" id="resume" class="btn ghost" hidden>Continuar onde fiquei</button>
+      </div>
+    </section>
+
+    <form id="form" novalidate hidden autocomplete="on">
+      <div id="stepHost"></div>
+    </form>
+
+    <section id="done" class="card" hidden></section>
+
+    <footer id="foot"></footer>
+  </div>
+
+  <div class="nav" id="nav" hidden>
+    <div class="in-nav">
+      <button type="button" class="btn ghost" id="prev">Anterior</button>
+      <span class="save" id="saveNote">Guardado automaticamente neste dispositivo</span>
+      <button type="button" class="btn" id="next">Seguinte</button>
+    </div>
+  </div>
+</main>
+
+<div class="overlay" id="overlay" hidden role="alertdialog" aria-live="assertive" aria-label="A enviar">
+  <div class="box"><div class="spin"></div><p id="overlayTxt" style="margin:0;font-weight:600;color:var(--navy)">A enviar…</p><p style="margin:6px 0 0;font-size:.86rem;color:var(--muted)">Por favor, não feche esta página.</p></div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* =====================================================================
+   CONFIGURAÇÃO — o que normalmente precisa de alterar está aqui
+   ===================================================================== */
+const CONFIG={
+  consultor:"Francisco Soares",
+  funcao:"Consultor Imobiliário",
+  telefone:"+351 963 750 988",
+  whatsapp:"351963750988",          // só dígitos, com indicativo (sem +). Vazio = sem botão de WhatsApp
+  email:"",                         // opcional: aparece no aviso de privacidade se preenchido
+  instagram:"",                     // opcional: nome de utilizador, sem @
+  endpoint:"",                      // URL da Web App do Google Apps Script (termina em /exec)
+  privacidadeUrl:"",                // opcional: ligação para uma política de privacidade
+  maxFicheiroMB:8,
+  maxTotalMB:40
+};
+
+/* =====================================================================
+   PERGUNTAS
+   ===================================================================== */
+const has=(v,id,x)=>Array.isArray(v[id])&&v[id].indexOf(x)>-1;
+const edificio=v=>v.tipo_imovel!=="Terreno";
+const terreno=v=>v.tipo_imovel==="Terreno";
+const T=(id,label,o)=>Object.assign({id:id,label:label,type:"text"},o);
+const A=(id,label,o)=>Object.assign({id:id,label:label,type:"textarea"},o);
+const N=(id,label,o)=>Object.assign({id:id,label:label,type:"number"},o);
+const R=(id,label,opts,o)=>Object.assign({id:id,label:label,type:"radio",opts:opts},o);
+const C=(id,label,opts,o)=>Object.assign({id:id,label:label,type:"chips",opts:opts},o);
+const D=(id,label,opts,o)=>Object.assign({id:id,label:label,type:"select",opts:opts},o);
+
+const STEPS=[
+/* ---------- PARTE 1 · O ESSENCIAL ---------- */
+{id:"sobre",part:1,title:"Para começar",intro:"Como podemos falar?",fields:[
+  T("nome","O seu nome",{req:true,autocomplete:"name"}),
+  T("telemovel","Telemóvel",{type:"tel",req:true,autocomplete:"tel",ph:"9xx xxx xxx",hint:"De preferência com WhatsApp."}),
+  T("email","Email",{type:"email",autocomplete:"email",hint:"Opcional."}),
+  C("contacto_pref","Como prefere que o contacte?",["WhatsApp","Chamada","Email"]),
+  R("horario","Melhor altura do dia para falarmos",["Manhã","Hora de almoço","Tarde","Fim do dia","Indiferente"])
+]},
+
+{id:"imovel",part:1,title:"O imóvel",intro:"Onde fica e o essencial sobre ele.",fields:[
+  R("tipo_imovel","Que tipo de imóvel é?",["Apartamento","Moradia","Quinta / herdade","Terreno","Prédio","Loja / escritório","Outro"],{req:true}),
+  T("tipo_outro","Qual?",{show:v=>v.tipo_imovel==="Outro"}),
+  T("morada","Morada",{ph:"Rua e localidade",hint:"Se preferir, indique apenas a rua; o número fica para quando nos encontrarmos."}),
+  T("freguesia","Freguesia",{half:true}),
+  T("concelho","Concelho",{req:true,half:true}),
+  T("fracao","Andar e fração",{ph:"Ex.: 3.º Esq., fração F",show:v=>["Apartamento","Loja / escritório"].indexOf(v.tipo_imovel)>-1}),
+  R("tipologia","Tipologia",["T0","T1","T2","T3","T4","T5","T6 ou superior"],{show:edificio}),
+  N("area_util","Área útil aproximada",{unit:"m²",show:edificio,hint:"Consta da caderneta predial ou do certificado energético."}),
+  N("area_terreno","Área do terreno",{unit:"m²",show:v=>["Moradia","Quinta / herdade","Terreno","Prédio"].indexOf(v.tipo_imovel)>-1}),
+  N("ano_construcao","Ano de construção (aprox.)",{show:edificio,ph:"Ex.: 1998"}),
+  R("estado","Em que estado se encontra?",["Novo ou como novo","Muito bom","Bom","Precisa de obras ligeiras","Precisa de obras profundas"],{show:edificio}),
+  C("extras","Tem algum destes extras?",["Jardim","Varanda / terraço","Piscina","Elevador","Arrecadação","Churrasqueira","Vista desafogada"],{show:edificio})
+]},
+
+{id:"venda",part:1,title:"A venda",intro:"Para alinharmos expectativas desde o início. Responda apenas ao que lhe for confortável.",fields:[
+  C("motivo","Qual é o motivo da venda?",["Mudar para uma casa maior","Mudar para uma casa mais pequena","Mudança de cidade ou de país","Alteração da situação familiar","Partilha de herança","Investimento","Reforma","Outro motivo"],{hint:"Pode escolher mais do que uma."}),
+  R("prazo","Em que prazo gostaria de vender?",["O mais breve possível","Nos próximos 3 meses","Entre 3 e 6 meses","Entre 6 e 12 meses","Sem pressa"]),
+  T("preco_esperado","Tem um valor em mente?",{inputmode:"decimal",ph:"€",hint:"Opcional. Se preferir, começamos por um estudo de mercado e falamos disso depois."}),
+  R("ocupacao","Neste momento, o imóvel está…",["Habitado por si ou pela família","Devoluto","Arrendado","Segunda habitação","Em obras","Outra situação"],{show:edificio}),
+  R("proprietarios","Quem são os proprietários?",["Só eu","Eu e mais pessoas","Herança, com vários herdeiros"]),
+  T("outros_prop","Nomes dos outros proprietários",{ph:"Nomes completos",show:v=>!!v.proprietarios&&v.proprietarios!=="Só eu"}),
+  R("acordo","Estão todos de acordo com a venda?",["Sim","Estamos a conversar","Ainda não falámos"],{show:v=>!!v.proprietarios&&v.proprietarios!=="Só eu"})
+]},
+
+{id:"essencial",part:1,kind:"checkpoint",title:"O essencial está feito",fields:[]},
+
+/* ---------- PARTE 2 · OS DETALHES ---------- */
+{id:"espacos",part:2,title:"Espaços e estado",intro:"Como é o imóvel por dentro e por fora.",fields:[
+  R("terreno_tipo","Classificação do terreno",["Urbano","Rústico","Misto","Não sei"],{show:terreno}),
+  A("terreno_detalhe","O que se pode construir? Que acessos e infraestruturas tem?",{show:terreno,hint:"PDM, viabilidade de construção, água, eletricidade, acessos, poços, árvores…"}),
+  N("quartos","Quartos",{show:edificio}),
+  N("suites","Dos quais, suítes",{show:edificio}),
+  N("wc","Casas de banho",{show:edificio}),
+  N("pisos","Pisos",{show:edificio}),
+  C("cozinha","Cozinha",["Equipada","Remodelada","Aberta para a sala","Ilha ou península","Despensa","Original / antiga"],{show:edificio}),
+  C("espacos_extra","Outros espaços",["Escritório","Lavandaria","Sótão","Cave","Arrecadação","Quarto de hóspedes","Ginásio / sala de jogos","Adega","Marquise","Closet"],{show:edificio}),
+  R("garagem","Estacionamento",["Garagem fechada","Lugar de garagem em parque","Lugar ao ar livre","Sem estacionamento próprio"],{show:edificio}),
+  T("piscina","Piscina: dimensões, tipo e estado",{show:v=>has(v,"extras","Piscina"),ph:"Ex.: 8×4 m, sal, aquecida, de 2018"}),
+  C("vistas","Vistas",["Mar","Rio","Serra","Campo","Cidade","Jardim","Sem vista especial"],{excl:["Sem vista especial"]}),
+  C("orientacao","Orientação solar",["Norte","Sul","Nascente","Poente","Não sei"],{excl:["Não sei"]}),
+  C("clima","Aquecimento e arrefecimento",["Ar condicionado","Bomba de calor","Piso radiante","Radiadores","Lareira ou recuperador","Painéis solares térmicos","Sem aquecimento"],{show:edificio,excl:["Sem aquecimento"]}),
+  C("tecnologia","Energia, segurança e conforto",["Painéis fotovoltaicos","Carregador de veículo elétrico","Domótica","Alarme","Videoporteiro","Fibra ótica","Aspiração central","Acesso para mobilidade reduzida"],{show:edificio}),
+  D("classe_energetica","Classe energética",["A+","A","B","B-","C","D","E","F","Não tenho certificado","Não sei"],{show:edificio}),
+  A("equipamentos","O que fica no imóvel?",{rows:3,show:edificio,hint:"Mobiliário, eletrodomésticos, ar condicionado… e o que prefere levar."}),
+  A("divisoes","Descreva o imóvel divisão a divisão",{rows:5,show:edificio,hint:"Opcional. Tamanhos aproximados e o que tem cada divisão; pode escrever em tópicos."})
+]},
+
+{id:"obras",part:2,title:"Obras e situação",intro:"O que já foi feito e o que convém saber. Dizer tudo desde o início evita surpresas mais tarde.",fields:[
+  N("ano_aquisicao","Desde que ano é seu?",{ph:"Ex.: 2008"}),
+  R("forma_aquisicao","Como o adquiriu?",["Compra","Herança","Doação","Construção própria","Outra"]),
+  R("obras_tem","Já fez obras ou melhorias?",["Sim","Não","Não me recordo"],{show:edificio}),
+  {id:"obras",label:"Obras realizadas",type:"repeater",itemLabel:"Obra",show:v=>edificio(v)&&v.obras_tem==="Sim",
+    cols:[{k:"ano",label:"Ano",ph:"2019",num:true},{k:"valor",label:"Valor aprox. (€)",num:true},{k:"descricao",label:"O que foi feito",wide:true},{k:"licenca",label:"Com licença?",opts:["Sim","Não","Não sei"]},{k:"faturas",label:"Tem faturas?",opts:["Sim","Não"]}],
+    rowFmt:r=>(r.ano||"s/ data")+": "+(r.descricao||"obra")+(r.valor?" ("+r.valor+" €)":"")+(r.licenca?" · licença: "+r.licenca:"")+(r.faturas?" · faturas: "+r.faturas:"")},
+  R("nao_legal","Alguma alteração poderá precisar de ser regularizada?",["Não","Sim","Não sei"],{show:edificio,hint:"Por exemplo: marquise, varanda fechada, ampliação ou anexo. Saber já evita surpresas na escritura."}),
+  A("nao_legal_det","Que alterações?",{show:v=>edificio(v)&&["Sim","Não sei"].indexOf(v.nao_legal)>-1}),
+  C("problemas","Há algo sobre o estado do imóvel que convenha saber?",["Humidade ou infiltrações","Instalação elétrica antiga","Canalização","Telhado","Fissuras","Isolamento fraco","Nada de relevante"],{show:edificio,excl:["Nada de relevante"]}),
+  A("problemas_det","Pode explicar?",{show:v=>edificio(v)&&Array.isArray(v.problemas)&&v.problemas.length>0&&!has(v,"problemas","Nada de relevante"),hint:"O que existe, desde quando e o que já foi feito."}),
+  R("ja_venda","O imóvel já esteve à venda?",["Não","Sim"]),
+  A("venda_anterior","Como correu?",{show:v=>v.ja_venda==="Sim",hint:"Durante quanto tempo e porque acha que não se concretizou."}),
+  A("arrendamento","Sobre o arrendamento",{show:v=>v.ocupacao==="Arrendado",hint:"Renda mensal, fim do contrato e se o inquilino sabe da venda."}),
+  C("onus","Existe alguma destas situações?",["Crédito habitação (hipoteca)","Arrendamento em vigor","Usufruto de terceiros","Herança por partilhar","Servidão ou direito de terceiros","Nenhuma","Prefiro falar pessoalmente"],{excl:["Nenhuma","Prefiro falar pessoalmente"],hint:"Serve apenas para preparar a escritura sem atrasos."}),
+  T("imi","IMI anual (aprox.)",{half:true,inputmode:"decimal",ph:"€"}),
+  T("condominio_quota","Condomínio mensal (aprox.)",{half:true,inputmode:"decimal",ph:"€",hint:"Se não existir, deixe em branco."})
+]},
+
+{id:"casa",part:2,title:"O imóvel e a zona",intro:"Os compradores não compram só metros quadrados. Estas respostas ajudam-me a contar a casa como ela merece. Escreva como se estivesse a falar com um amigo.",fields:[
+  A("gosta_mais","O que mais gosta neste imóvel?"),
+  A("melhor_momento","Qual é o melhor momento do dia aqui?",{hint:"Onde está, o que vê, o que sente."}),
+  A("memorias","Há alguma memória ou história que a casa guarde?",{hint:"Opcional: só se quiser partilhar."}),
+  A("para_quem","Que tipo de família ou pessoa imagina feliz aqui?"),
+  C("mais_valias","O que mais valoriza?",["Localização","Luz natural","Vistas desafogadas","Silêncio","Exposição solar","Estacionamento fácil","Jardim / exteriores","Cozinha renovada","Divisões amplas","Muitas arrumações","Bons acabamentos","Eficiência energética","Perto de transportes","Potencial de ampliação","Boa vizinhança"],{hint:"Escolha os que se aplicam."}),
+  A("diferencial","O que o torna diferente dos outros da mesma zona?"),
+  C("menos_valias","E o que poderia ser melhor?",["Falta de estacionamento","Precisa de obras","Pouca luz natural","Divisões pequenas","Sem elevador","Sem exterior","Cozinha ou casas de banho antigas","Condomínio elevado","Acessos difíceis","Longe de serviços"],{hint:"Uma visão franca ajuda-me a preparar o imóvel e a antecipar as perguntas dos compradores."}),
+  A("objecoes","Que comentários já ouviu de quem o visitou?",{hint:"Opcional."}),
+  R("ambiente","Como descreve o ambiente da zona?",["Residencial e calmo","Misto","Central e animado","Rural / isolado"]),
+  C("servicos","O que existe perto?",["Escolas","Supermercado","Farmácia","Centro de saúde / hospital","Cafés e restaurantes","Parques e jardins","Praia","Comboio / metro","Autocarro","Acesso rápido a autoestrada"]),
+  A("zona_desc","Fale-me da zona e da vizinhança",{hint:"Do que mais gosta e o que costuma dizer a quem pergunta."}),
+  C("alertas","Há algo na envolvente a ter em conta?",["Ruído","Trânsito","Zona inundável","Obras ou projetos previstos","Linhas de alta tensão","Nada de relevante"],{excl:["Nada de relevante"]})
+]},
+
+{id:"docs",part:2,kind:"docs",section:"Documentos",title:"Documentos (opcional)",intro:"Tudo opcional. Pode carregar PDF ou fotografias (até __MAXMB__ MB cada). Se não tiver algum documento, marque «Não tenho / preciso de ajuda» e falamos sobre isso. Não envie aqui documentos de identificação (CC, NIF): tratamos disso presencialmente, na assinatura do contrato.",fields:[
+  T("certidao_codigo","Código de acesso da certidão permanente",{ph:"0000-0000-0000",hint:"Se tiver este código, consigo consultar a certidão online, sem precisar do documento."})
+]},
+
+{id:"final",part:2,kind:"final",section:"Últimos detalhes",title:"Últimos detalhes",intro:"Quase pronto: três perguntas rápidas e é só enviar.",fields:[
+  R("visitas","Para as visitas, o que funciona melhor?",["Com aviso prévio, a qualquer hora","Só em horários combinados","Com a minha presença"]),
+  C("divulgacao","O que gostaria na divulgação?",["Fotografia profissional","Vídeo","Drone","Tour virtual 360°"]),
+  R("morada_div","Divulgação da localização",["Morada exata","Apenas a zona","Prefiro falar sobre isto"]),
+  D("como_conheceu","Como me conheceu?",["Redes sociais","Recomendação de alguém","Anúncio","Placa na rua","Pesquisa na internet","Outro"]),
+  A("notas_finais","Há mais alguma coisa que devesse saber?",{rows:4})
+]}
+];
+
+const DOCS=[
+  {id:"caderneta",label:"Caderneta predial",hint:"Obtém-se no Portal das Finanças."},
+  {id:"certidao",label:"Certidão permanente do registo predial",hint:"Se não tiver o documento, basta o código de acesso indicado acima."},
+  {id:"ce",label:"Certificado energético"},
+  {id:"licenca",label:"Licença de utilização e ficha técnica da habitação"},
+  {id:"plantas",label:"Plantas e projeto de arquitetura"},
+  {id:"escritura",label:"Escritura ou título de aquisição",hint:"Compra, doação ou habilitação de herdeiros."},
+  {id:"condominio",label:"Documentos do condomínio",hint:"Regulamento, última ata e declaração de quotas em dia."},
+  {id:"arrendamento",label:"Contrato de arrendamento",show:v=>v.ocupacao==="Arrendado"},
+  {id:"obras",label:"Faturas de obras e garantias de equipamentos"},
+  {id:"fotos",label:"Fotografias do imóvel",hint:"As que já tiver; não precisam de ser profissionais. Vídeos podem ser enviados por WhatsApp.",images:true},
+  {id:"outros",label:"Outros documentos"}
+];
+
+/* =====================================================================
+   ESTADO
+   ===================================================================== */
+const KEY="fichaImovel.v2";
+const S={v:{},nao:{},files:{},stepId:"sobre",sid:null,folderId:null,enviado:null,up:{},consent:false,busy:false};
+let wraps={};
+
+const $=(s,r)=>(r||document).querySelector(s);
+function add(n,c){if(c===null||c===undefined||c===false)return;if(Array.isArray(c)){c.forEach(x=>add(n,x));}else{n.append(c.nodeType?c:document.createTextNode(String(c)));}}
+function el(tag,attrs){
+  const n=document.createElement(tag);
+  if(attrs){for(const k in attrs){const v=attrs[k];if(v===null||v===undefined||v===false)continue;
+    if(k==="class")n.className=v;else if(k.slice(0,2)==="on")n.addEventListener(k.slice(2),v);else n.setAttribute(k,v===true?"":String(v));}}
+  for(let i=2;i<arguments.length;i++)add(n,arguments[i]);
+  return n;
+}
+const uid=()=>(window.crypto&&crypto.randomUUID)?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2,10);
+const fmtSize=b=>b>=1048576?(b/1048576).toFixed(1).replace(".",",")+" MB":Math.max(1,Math.round(b/1024))+" KB";
+
+/* rascunho local */
+let saveT=null;
+function persist(){
+  clearTimeout(saveT);
+  saveT=setTimeout(function(){
+    try{localStorage.setItem(KEY,JSON.stringify({v:S.v,nao:S.nao,stepId:S.stepId,sid:S.sid,folderId:S.folderId,enviado:S.enviado,consent:S.consent,t:Date.now()}));}catch(e){}
+  },250);
+}
+function loadDraft(){try{return JSON.parse(localStorage.getItem(KEY)||"null");}catch(e){return null;}}
+function clearDraft(){clearTimeout(saveT);try{localStorage.removeItem(KEY);}catch(e){}}
+
+/* =====================================================================
+   LÓGICA DE PASSOS
+   ===================================================================== */
+const visibleSteps=()=>STEPS.filter(s=>!s.show||s.show(S.v));
+const isVis=(f,st)=>(!st.show||st.show(S.v))&&(!f.show||f.show(S.v));
+function answered(f){
+  const v=S.v[f.id];
+  if(v===null||v===undefined)return false;
+  if(f.type==="repeater")return Array.isArray(v)&&v.some(r=>Object.keys(r).length>0);
+  if(Array.isArray(v))return v.length>0;
+  return String(v).trim()!=="";
+}
+function stepStats(st){
+  let a=0,t=0;
+  if(st.kind==="docs"){
+    DOCS.forEach(d=>{if(d.show&&!d.show(S.v))return;t++;if((S.files[d.id]&&S.files[d.id].length)||S.nao[d.id])a++;});
+    return{a:a,t:t};
+  }
+  st.fields.forEach(f=>{if(!isVis(f,st))return;t++;if(answered(f))a++;});
+  return{a:a,t:t};
+}
+function totals(parte){
+  let a=0,t=0;
+  visibleSteps().forEach(st=>{
+    if(st.kind==="docs"||st.kind==="final"||st.kind==="checkpoint")return;
+    if(parte==="essencial"&&st.part!==1)return;
+    const s=stepStats(st);a+=s.a;t+=s.t;
+  });
+  return{a:a,t:t};
+}
+function pos(st){
+  const real=visibleSteps().filter(s=>s.kind!=="checkpoint");
+  const inPart=real.filter(s=>s.part===st.part);
+  if(st.kind==="checkpoint")return{label:"O essencial · concluído",pct:Math.round(inPart.length/real.length*100)};
+  const i=real.indexOf(st),j=inPart.indexOf(st);
+  return{label:(st.part===1?"O essencial":"Os detalhes")+" · "+(j+1)+" de "+inPart.length,pct:Math.round((i+1)/real.length*100)};
+}
+const partLabel=st=>"Parte "+st.part+" de 2 · "+(st.part===1?"O essencial":"Os detalhes");
+
+/* =====================================================================
+   RENDER DE CAMPOS
+   ===================================================================== */
+function renderField(f){
+  const wrap=el("div",{class:"field"+((f.type==="number"||f.half)?" half":""),"data-fid":f.id});
+  const lid="f_"+f.id;
+  const textual=["text","tel","email","url","number","textarea","select"].indexOf(f.type)>-1;
+  const label=textual
+    ?el("label",{class:"lbl",for:lid},f.label,f.req?el("span",{class:"req"}," *"):null)
+    :el("div",{class:"lbl",id:lid+"_l"},f.label,f.req?el("span",{class:"req"}," *"):null);
+  wrap.append(label);
+  if(f.hint)wrap.append(el("span",{class:"hint",id:lid+"_h"},f.hint));
+  const cur=S.v[f.id];
+
+  if(f.type==="textarea"){
+    const ta=el("textarea",{class:"in",id:lid,rows:f.rows||4,"aria-describedby":f.hint?lid+"_h":null});
+    ta.value=cur||"";
+    ta.addEventListener("input",function(){if(ta.value.trim())S.v[f.id]=ta.value;else delete S.v[f.id];changed();});
+    wrap.append(ta);
+  }else if(f.type==="select"){
+    const sel=el("select",{class:"in",id:lid});
+    sel.append(el("option",{value:""},"Selecione…"));
+    f.opts.forEach(o=>sel.append(el("option",{value:o},o)));
+    sel.value=cur||"";
+    sel.addEventListener("change",function(){if(sel.value)S.v[f.id]=sel.value;else delete S.v[f.id];changed();});
+    wrap.append(sel);
+  }else if(f.type==="radio"||f.type==="chips"){
+    const multi=f.type==="chips";
+    const grp=el("div",{class:"opts",role:multi?"group":"radiogroup","aria-labelledby":lid+"_l"});
+    const btns=[];
+    const sync=function(){
+      const val=S.v[f.id];
+      btns.forEach(function(b){
+        const on=multi?(Array.isArray(val)&&val.indexOf(b.dataset.o)>-1):val===b.dataset.o;
+        b.setAttribute(multi?"aria-pressed":"aria-checked",String(on));
+      });
+    };
+    f.opts.forEach(function(o){
+      const b=el("button",{type:"button",class:"opt",role:multi?null:"radio","data-o":o,onclick:function(){
+        if(multi){
+          const set=new Set(Array.isArray(S.v[f.id])?S.v[f.id]:[]);
+          if(set.has(o))set.delete(o);
+          else{
+            if(f.excl&&f.excl.indexOf(o)>-1)set.clear();
+            else if(f.excl)f.excl.forEach(x=>set.delete(x));
+            set.add(o);
+          }
+          const arr=f.opts.filter(x=>set.has(x));
+          if(arr.length)S.v[f.id]=arr;else delete S.v[f.id];
+        }else{
+          if(S.v[f.id]===o)delete S.v[f.id];else S.v[f.id]=o;
+        }
+        sync();changed();
+      }},o);
+      btns.push(b);grp.append(b);
+    });
+    sync();wrap.append(grp);
+  }else if(f.type==="repeater"){
+    renderRepeater(f,wrap);
+  }else{
+    const isNum=f.type==="number";
+    const inp=el("input",{class:"in",id:lid,type:isNum?"text":f.type,inputmode:isNum?"decimal":(f.inputmode||null),autocomplete:f.autocomplete||"off",enterkeyhint:"next",placeholder:f.ph||null,"aria-describedby":f.hint?lid+"_h":null});
+    inp.value=cur||"";
+    inp.addEventListener("input",function(){if(inp.value.trim())S.v[f.id]=inp.value.trim();else delete S.v[f.id];changed();});
+    if(f.unit)wrap.append(el("div",{class:"inwrap"},inp,el("span",{class:"suffix"},f.unit)));
+    else wrap.append(inp);
+  }
+  return wrap;
+}
+
+function renderRepeater(f,wrap){
+  const rows=el("div",{class:"rep"});
+  function paint(){
+    rows.replaceChildren();
+    const arr=S.v[f.id]||(S.v[f.id]=[{}]);
+    if(!arr.length)arr.push({});
+    arr.forEach(function(r,i){
+      const row=el("div",{class:"rep-row"});
+      row.append(el("div",{class:"rep-title"},el("span",null,f.itemLabel+" "+(i+1)),
+        (arr.length>1||Object.keys(r).length)?el("button",{type:"button",class:"link",onclick:function(){arr.splice(i,1);paint();changed();}},"Remover"):null));
+      const g=el("div",{class:"rep-grid"});
+      f.cols.forEach(function(c){
+        const id="r_"+f.id+"_"+i+"_"+c.k;
+        const w=el("div",{class:"rep-f"+(c.wide?" wide":"")});
+        w.append(el("label",{class:"lbl sm",for:id},c.label));
+        let inp;
+        if(c.opts){
+          inp=el("select",{class:"in",id:id});
+          inp.append(el("option",{value:""},"—"));
+          c.opts.forEach(o=>inp.append(el("option",{value:o},o)));
+          inp.value=r[c.k]||"";
+        }else{
+          inp=el("input",{class:"in",id:id,type:"text",inputmode:c.num?"decimal":null,enterkeyhint:"next",placeholder:c.ph||null});
+          inp.value=r[c.k]||"";
+        }
+        const h=function(){if(inp.value.trim())r[c.k]=inp.value.trim();else delete r[c.k];changed();};
+        inp.addEventListener(c.opts?"change":"input",h);
+        w.append(inp);g.append(w);
+      });
+      row.append(g);rows.append(row);
+    });
+  }
+  paint();
+  wrap.append(rows,el("button",{type:"button",class:"btn ghost sm",onclick:function(){(S.v[f.id]=S.v[f.id]||[]).push({});paint();changed();}},"+ Adicionar obra"));
+}
+
+/* documentos */
+function renderDocs(){
+  const box=el("section",{class:"card","aria-label":"Carregar documentos"});
+  box.append(el("h3",null,"Carregar ficheiros"));
+  DOCS.forEach(function(d){
+    if(d.show&&!d.show(S.v))return;
+    const list=el("ul",{class:"files"});
+    const msg=el("div",{class:"msg",role:"alert",hidden:true});
+    const input=el("input",{type:"file",hidden:true,multiple:true,accept:d.images?"image/*":"application/pdf,image/*,.doc,.docx","data-slot":d.id});
+    const nao=el("button",{type:"button",class:"opt","aria-pressed":String(!!S.nao[d.id]),onclick:function(){
+      if(S.nao[d.id])delete S.nao[d.id];else S.nao[d.id]=true;
+      nao.setAttribute("aria-pressed",String(!!S.nao[d.id]));changed();
+    }},"Não tenho / preciso de ajuda");
+    const pick=el("button",{type:"button",class:"btn ghost sm",onclick:function(){input.click();}},"Carregar ficheiros");
+    function paintList(){
+      list.replaceChildren();
+      (S.files[d.id]||[]).forEach(function(it,i){
+        list.append(el("li",null,el("span",{class:"n"},it.file.name),el("span",{class:"s"},fmtSize(it.file.size)),
+          el("button",{type:"button",class:"link",onclick:function(){S.files[d.id].splice(i,1);if(!S.files[d.id].length)delete S.files[d.id];paintList();changed();}},"Remover")));
+      });
+    }
+    input.addEventListener("change",async function(){
+      msg.hidden=true;
+      const picked=Array.from(input.files||[]);input.value="";
+      pick.disabled=true;pick.textContent="A preparar…";
+      const errs=[];
+      for(const f0 of picked){
+        const f=await shrinkImage(f0);
+        if(f.size>CONFIG.maxFicheiroMB*1048576){errs.push("«"+f0.name+"» tem "+fmtSize(f.size)+" (máximo "+CONFIG.maxFicheiroMB+" MB).");continue;}
+        if(totalBytes()+f.size>CONFIG.maxTotalMB*1048576){errs.push("Limite total de "+CONFIG.maxTotalMB+" MB atingido; «"+f0.name+"» não foi adicionado.");continue;}
+        (S.files[d.id]=S.files[d.id]||[]).push({file:f});
+      }
+      pick.disabled=false;pick.textContent="Carregar ficheiros";
+      if(errs.length){msg.textContent=errs.join(" ")+" Pode enviá-los depois por WhatsApp.";msg.hidden=false;}
+      paintList();changed();
+    });
+    paintList();
+    box.append(el("div",{class:"slot","data-slot-box":d.id},el("h4",null,d.label),d.hint?el("span",{class:"hint"},d.hint):null,
+      el("div",{class:"row"},pick,nao),input,msg,list));
+  });
+  return box;
+}
+const totalBytes=()=>Object.keys(S.files).reduce((a,k)=>a+S.files[k].reduce((b,x)=>b+x.file.size,0),0);
+
+async function shrinkImage(file){
+  if(!/^image\/(jpeg|png|webp)$/.test(file.type)||file.size<900*1024)return file;
+  try{
+    const bmp=await createImageBitmap(file);
+    const sc=Math.min(1,2400/Math.max(bmp.width,bmp.height));
+    const w=Math.round(bmp.width*sc),h=Math.round(bmp.height*sc);
+    const cv=document.createElement("canvas");cv.width=w;cv.height=h;
+    const ctx=cv.getContext("2d");ctx.fillStyle="#fff";ctx.fillRect(0,0,w,h);ctx.drawImage(bmp,0,0,w,h);
+    const blob=await new Promise(r=>cv.toBlob(r,"image/jpeg",0.82));
+    if(!blob||blob.size>=file.size)return file;
+    return new File([blob],file.name.replace(/\.[^.]+$/,"")+".jpg",{type:"image/jpeg"});
+  }catch(e){return file;}
+}
+
+/* consentimento (usado no ponto de controlo e no passo final) */
+function consentBox(extra){
+  const box=el("section",{class:"card","data-consent":"1"});
+  const cb=el("input",{type:"checkbox",id:"consent"});
+  cb.checked=S.consent;
+  cb.addEventListener("change",function(){S.consent=cb.checked;const m=$("#consentMsg");if(m&&cb.checked)m.hidden=true;persist();});
+  box.append(el("label",{class:"consent",for:"consent"},cb,el("span",null,"Li e aceito que os meus dados e documentos sejam tratados por "+CONFIG.consultor+" para avaliar o imóvel, preparar a sua venda e contactar-me sobre esse processo. ",el("span",{class:"req",style:"color:var(--gold-d)"},"*"))));
+  box.append(el("div",{class:"msg",id:"consentMsg",role:"alert",hidden:true},"Para enviar, é necessário aceitar o tratamento dos dados."));
+  const contacto=[CONFIG.telefone?"pelo "+CONFIG.telefone:"",CONFIG.email?"por "+CONFIG.email:""].filter(Boolean).join(" ou ");
+  const legal=el("p",{class:"legal"},"Os dados ficam em acesso restrito e só são utilizados para este fim. Informação sobre o imóvel poderá ser partilhada com potenciais compradores no âmbito da venda. Pode pedir o acesso, a retificação ou a eliminação dos seus dados a qualquer momento"+(contacto?", contactando-me "+contacto:"")+". ");
+  if(CONFIG.privacidadeUrl)legal.append(el("a",{href:CONFIG.privacidadeUrl,target:"_blank",rel:"noopener"},"Política de privacidade"));
+  box.append(legal);
+  box.append(el("div",{class:"hp","aria-hidden":"true"},el("label",null,"Não preencher",el("input",{type:"text",id:"hp",tabindex:"-1",autocomplete:"off"}))));
+  box.append(el("div",{id:"finalBanner"}));
+  if(!CONFIG.endpoint)box.append(el("div",{class:"banner warn"},"Pré-visualização: a ligação ao Google ainda não está configurada, por isso, ao enviar, as respostas serão apenas descarregadas para este dispositivo."));
+  if(extra)box.append(extra);
+  return box;
+}
+
+/* ponto de controlo: essencial concluído */
+function checkpointIntro(){
+  const t=totals("essencial");
+  return "Respondeu a "+t.a+" de "+t.t+" perguntas. "+(S.enviado?"O essencial já foi enviado; pode acrescentar os detalhes quando quiser.":"Obrigado: já tenho o essencial para começar. Pode enviar agora e falamos em breve, ou dedicar mais uns 10 minutos aos detalhes — quanto mais eu souber do imóvel, melhor o consigo valorizar.");
+}
+function renderCheckpoint(){
+  const frag=el("div");
+  const cont=el("button",{type:"button",class:"btn"+(S.enviado?" gold":""),id:"cont",onclick:function(){const steps=visibleSteps();const i=steps.findIndex(s=>s.id==="essencial");goTo(steps[i+1].id);}},"Continuar com os detalhes");
+  if(S.enviado){
+    frag.append(el("div",{class:"actions",style:"margin:0 0 18px"},cont));
+  }else{
+    const send=el("button",{type:"button",class:"btn gold",id:"sendEss",onclick:function(){submit("essencial");}},"Enviar o essencial");
+    frag.append(consentBox(el("div",{class:"actions",style:"margin-top:14px"},send,cont)));
+  }
+  return frag;
+}
+
+/* passo final */
+function renderFinal(){
+  const frag=el("div");
+  const sum=el("section",{class:"card"});
+  const t=totals("completa");
+  sum.append(el("h3",null,"Resumo"),el("p",{class:"big"},t.a+" de "+t.t+" perguntas respondidas"),
+    el("p",{class:"legal",style:"margin:4px 0 0"},"Não faz mal se ficarem perguntas por responder: podemos completar tudo numa conversa."));
+  const ul=el("ul",{class:"sum"});
+  visibleSteps().forEach(function(st){
+    if(st.kind==="final"||st.kind==="checkpoint")return;
+    const s=stepStats(st);
+    const nFiles=Object.keys(S.files).reduce((a,k)=>a+S.files[k].length,0);
+    const c=st.kind==="docs"?(nFiles+(nFiles===1?" ficheiro":" ficheiros")+" · "+s.a+" de "+s.t):(s.a+" de "+s.t);
+    ul.append(el("li",null,el("span",null,st.title.replace(" (opcional)","")),el("span",{class:"c"},c),el("button",{type:"button",class:"link",onclick:function(){goTo(st.id,false,true);}},"Rever")));
+  });
+  sum.append(ul);frag.append(sum);
+  frag.append(consentBox());
+  return frag;
+}
+
+/* =====================================================================
+   NAVEGAÇÃO
+   ===================================================================== */
+const host=$("#stepHost"),form=$("#form"),intro=$("#intro"),doneEl=$("#done"),nav=$("#nav");
+const btnPrev=$("#prev"),btnNext=$("#next");
+
+function setMode(inForm){
+  document.body.classList.toggle("inform",inForm);
+  $("#bar").hidden=!inForm;$("#topLabel").hidden=!inForm;
+}
+function renderStep(back){
+  const steps=visibleSteps();
+  let i=steps.findIndex(s=>s.id===S.stepId);
+  if(i<0){i=0;S.stepId=steps[0].id;}
+  const st=steps[i];
+  wraps={};
+  host.replaceChildren();
+  const card=el("section",{class:"card step"+(back?" back":""),"aria-labelledby":"stepTitle"});
+  card.append(el("p",{class:"eyebrow"},partLabel(st)),el("h2",{id:"stepTitle",tabindex:"-1"},st.title));
+  const txt=st.kind==="checkpoint"?checkpointIntro():st.intro;
+  if(txt)card.append(el("p",{class:"intro"},txt));
+  const box=el("div",{class:"fields"});
+  st.fields.forEach(function(f){const w=renderField(f);wraps[f.id]=w;box.append(w);});
+  if(st.fields.length)card.append(box);
+  host.append(card);
+  if(st.kind==="docs")host.append(renderDocs());
+  if(st.kind==="checkpoint")host.append(renderCheckpoint());
+  if(st.kind==="final")host.append(renderFinal());
+  applyShow();
+  updateProgress();
+  btnPrev.hidden=(i===0);
+  btnNext.hidden=(st.kind==="checkpoint");
+  btnNext.textContent=st.kind==="final"?(S.enviado?"Enviar detalhes":"Enviar ficha"):"Seguinte";
+  btnNext.classList.toggle("gold",st.kind==="final");
+}
+function applyShow(){
+  const st=visibleSteps().find(s=>s.id===S.stepId);if(!st)return;
+  st.fields.forEach(function(f){const w=wraps[f.id];if(w)w.hidden=!(!f.show||f.show(S.v));});
+}
+function updateProgress(){
+  const st=visibleSteps().find(s=>s.id===S.stepId)||visibleSteps()[0];
+  const p=pos(st);
+  $("#topLabel").textContent=p.label;
+  $("#topBar").style.width=p.pct+"%";
+}
+function changed(){applyShow();updateProgress();persist();}
+function goTo(id,noPush,back){
+  S.stepId=id;renderStep(back);persist();window.scrollTo(0,0);
+  try{if(noPush)history.replaceState({s:id},"");else history.pushState({s:id},"");}catch(e){}
+  const h=$("#stepTitle");if(h)h.focus({preventScroll:true});
+}
+function validateStep(st){
+  let first=null;
+  st.fields.forEach(function(f){
+    const w=wraps[f.id];if(!w||w.hidden)return;
+    w.classList.remove("bad");const old=w.querySelector(".msg");if(old)old.remove();
+    const val=S.v[f.id];let m=null;
+    if(f.req&&!answered(f))m="Este campo é obrigatório.";
+    else if(val&&f.type==="tel"&&String(val).replace(/\D/g,"").length<9)m="Indique um número de telemóvel válido.";
+    else if(val&&f.type==="email"&&!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val))m="Indique um email válido.";
+    else if(val&&f.type==="url"&&!/^https?:\/\//i.test(val))m="O link deve começar por http:// ou https://";
+    if(m){w.classList.add("bad");w.append(el("div",{class:"msg",role:"alert"},m));if(!first)first=w;}
+  });
+  return first;
+}
+function firstInvalidStep(){
+  for(const st of visibleSteps()){
+    for(const f of st.fields){
+      if(!isVis(f,st))continue;
+      const val=S.v[f.id];
+      if(f.req&&!answered(f))return st;
+      if(val&&f.type==="tel"&&String(val).replace(/\D/g,"").length<9)return st;
+      if(val&&f.type==="email"&&!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val))return st;
+      if(val&&f.type==="url"&&!/^https?:\/\//i.test(val))return st;
+    }
+  }
+  return null;
+}
+function scrollToEl(n){const y=n.getBoundingClientRect().top+window.pageYOffset-84;window.scrollTo({top:Math.max(0,y),behavior:"smooth"});}
+
+btnNext.addEventListener("click",function(){
+  const steps=visibleSteps();const i=steps.findIndex(s=>s.id===S.stepId);const st=steps[i];
+  if(st.kind==="final"){submit("completa");return;}
+  const bad=validateStep(st);
+  if(bad){scrollToEl(bad);return;}
+  goTo(steps[i+1].id);
+});
+btnPrev.addEventListener("click",function(){
+  const steps=visibleSteps();const i=steps.findIndex(s=>s.id===S.stepId);
+  if(i>0)goTo(steps[i-1].id,true,true);
+});
+form.addEventListener("submit",e=>e.preventDefault());
+/* Enter no teclado do telemóvel: passa ao campo seguinte */
+host.addEventListener("keydown",function(e){
+  if(e.key!=="Enter"||e.isComposing)return;
+  const t=e.target;
+  if(!t||t.tagName!=="INPUT"||t.type==="checkbox"||t.type==="file")return;
+  e.preventDefault();
+  const all=Array.from(host.querySelectorAll("input,textarea,select")).filter(x=>x.type!=="checkbox"&&x.type!=="file"&&!x.closest("[hidden]")&&!x.closest(".hp"));
+  const i=all.indexOf(t);
+  if(i>-1&&i<all.length-1)all[i+1].focus();else t.blur();
+});
+window.addEventListener("popstate",function(e){
+  if(!e.state)return;
+  if(e.state.s==="intro"){showIntro();return;}
+  if(!form.hidden&&e.state.s){S.stepId=e.state.s;renderStep(true);window.scrollTo(0,0);}
+});
+
+function showIntro(){form.hidden=true;nav.hidden=true;doneEl.hidden=true;intro.hidden=false;setMode(false);window.scrollTo(0,0);}
+function startForm(){
+  intro.hidden=true;doneEl.hidden=true;form.hidden=false;nav.hidden=false;setMode(true);
+  try{history.replaceState({s:"intro"},"");}catch(e){}
+  goTo(S.stepId,false);
+}
+
+/* =====================================================================
+   ENVIO
+   ===================================================================== */
+function fmtVal(f,v){
+  if(f.type==="repeater")return v.filter(r=>Object.keys(r).length).map(f.rowFmt).join("\n");
+  if(Array.isArray(v))return v.join(", ");
+  return String(v)+(f.unit?" "+f.unit:"");
+}
+function buildPayload(parte){
+  const sections=[];
+  visibleSteps().forEach(function(st){
+    if(st.kind==="checkpoint")return;
+    if(parte==="essencial"&&st.part!==1)return;
+    const items=[];
+    st.fields.forEach(function(f){if(isVis(f,st)&&answered(f))items.push({label:f.label,value:fmtVal(f,S.v[f.id])});});
+    if(st.kind==="docs"){
+      DOCS.forEach(function(d){
+        if(d.show&&!d.show(S.v))return;
+        const n=(S.files[d.id]||[]).length;
+        if(n)items.push({label:d.label,value:n+" ficheiro(s) carregado(s)"+(S.nao[d.id]?" · também indicou «Não tenho / preciso de ajuda»":"")});
+        else if(S.nao[d.id])items.push({label:d.label,value:"Não tenho / preciso de ajuda"});
+      });
+    }
+    if(items.length)sections.push({title:st.section||st.title,items:items});
+  });
+  const v=S.v,t=totals(parte);
+  return{
+    action:"submit",id:S.sid,versao:2,parte:parte,enviadoEm:new Date().toISOString(),
+    fields:{nome:v.nome||"",telemovel:v.telemovel||"",email:v.email||"",
+      tipo:v.tipo_imovel==="Outro"?(v.tipo_outro||"Outro"):(v.tipo_imovel||""),
+      concelho:v.concelho||"",freguesia:v.freguesia||"",morada:v.morada||"",preco:v.preco_esperado||"",prazo:v.prazo||""},
+    respondidas:t.a,total:t.t,ficheiros:flatFiles().length,sections:sections
+  };
+}
+function flatFiles(){
+  const out=[];
+  DOCS.forEach(function(d){(S.files[d.id]||[]).forEach(function(it,i){out.push({key:d.id+":"+i+":"+it.file.name+":"+it.file.size,label:d.label,file:it.file});});});
+  return out;
+}
+function toB64(file){
+  return new Promise(function(res,rej){const fr=new FileReader();fr.onload=()=>res(String(fr.result).split(",")[1]||"");fr.onerror=()=>rej(fr.error);fr.readAsDataURL(file);});
+}
+async function post(obj){
+  const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),180000);
+  try{
+    const r=await fetch(CONFIG.endpoint,{method:"POST",body:JSON.stringify(obj),signal:ctrl.signal,redirect:"follow"});
+    const j=await r.json();
+    if(!j||!j.ok)throw new Error((j&&j.erro)||"Resposta inválida do servidor");
+    return j;
+  }finally{clearTimeout(to);}
+}
+function setBusy(on,txt){S.busy=on;$("#overlay").hidden=!on;if(txt)$("#overlayTxt").textContent=txt;btnNext.disabled=on;}
+function downloadBackup(payload){
+  try{
+    const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);
+    a.download="ficha-imovel-"+((payload.fields.nome||"proprietario").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""))+".json";
+    document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+  }catch(e){}
+}
+function waLink(txt){return CONFIG.whatsapp?"https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent(txt):null;}
+
+async function submit(parte){
+  if(S.busy)return;
+  const badStep=firstInvalidStep();
+  if(badStep){
+    goTo(badStep.id);
+    const bad=validateStep(badStep);if(bad)scrollToEl(bad);
+    return;
+  }
+  if(!S.consent){const m=$("#consentMsg");if(m){m.hidden=false;scrollToEl(m);}return;}
+  const hp=$("#hp");if(hp&&hp.value){clearDraft();showDone({});return;}
+  if(!S.sid){S.sid=uid();persist();}
+  const payload=buildPayload(parte);
+  setBusy(true,"A enviar…");
+  try{
+    if(!CONFIG.endpoint){downloadBackup(payload);setBusy(false);showDone({preview:true,parte:parte});return;}
+    if(!S.folderId||S.enviado!==parte){const r=await post(payload);S.folderId=r.folderId;S.enviado=parte;persist();}
+    const queue=flatFiles().filter(q=>!S.up[q.key]);
+    const fail=[];let n=0;
+    for(const q of queue){
+      n++;setBusy(true,"A enviar documentos ("+n+" de "+queue.length+")…");
+      try{
+        await post({action:"file",id:S.sid,folderId:S.folderId,slot:q.label,name:q.file.name,mime:q.file.type||"application/octet-stream",data:await toB64(q.file)});
+        S.up[q.key]=1;
+      }catch(e){fail.push(q.file.name);}
+    }
+    setBusy(false);
+    if(fail.length){showFinalError("A ficha foi enviada, mas não foi possível enviar "+(fail.length===1?"este ficheiro":"estes ficheiros")+": "+fail.join(", ")+".",payload,parte);return;}
+    if(parte==="essencial"){persist();showDone({parte:"essencial"});return;}
+    clearDraft();showDone({});
+  }catch(e){
+    setBusy(false);
+    showFinalError("Não foi possível enviar neste momento. As suas respostas continuam guardadas neste dispositivo.",payload,parte);
+  }
+}
+function showFinalError(text,payload,parte){
+  const b=$("#finalBanner");if(!b)return;
+  b.replaceChildren();
+  const box=el("div",{class:"banner err",role:"alert"},el("strong",null,"Atenção. "),text);
+  const row=el("div",{class:"actions",style:"margin-top:12px"});
+  row.append(el("button",{type:"button",class:"btn sm",onclick:function(){submit(parte);}},"Tentar novamente"));
+  row.append(el("button",{type:"button",class:"btn ghost sm",onclick:function(){downloadBackup(payload);}},"Descarregar cópia das respostas"));
+  const w=waLink("Olá, "+CONFIG.consultor.split(" ")[0]+". Preenchi a ficha do imóvel mas houve um problema no envio. O meu nome é "+(S.v.nome||"")+".");
+  if(w)row.append(el("a",{class:"btn ghost sm",href:w,target:"_blank",rel:"noopener",style:"text-decoration:none"},"Avisar por WhatsApp"));
+  box.append(row);b.append(box);scrollToEl(box);
+}
+
+function showDone(o){
+  form.hidden=true;nav.hidden=true;intro.hidden=true;doneEl.hidden=false;setMode(false);
+  const first=(S.v.nome||"").trim().split(/\s+/)[0];
+  doneEl.replaceChildren();
+  doneEl.append(el("div",{class:"okmark"}));
+  doneEl.firstChild.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="#e3cd9c" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  doneEl.append(el("h1",null,first?"Obrigado, "+first+".":"Obrigado."));
+  if(o.preview){
+    doneEl.append(el("div",{class:"banner warn"},"Pré-visualização: as respostas não foram enviadas porque a ligação ao Google ainda não está configurada. Foi descarregada uma cópia para este dispositivo."));
+  }else if(o.parte==="essencial"){
+    doneEl.append(el("p",{class:"lead"},"Recebi o essencial e já posso começar a preparar-me. Entro em contacto consigo muito em breve."));
+    doneEl.append(el("p",{class:"intro"},"Se quiser, pode agora acrescentar os detalhes: demora cerca de 10 minutos e ajuda-me a valorizar melhor o imóvel."));
+  }else{
+    doneEl.append(el("p",{class:"lead"},"Recebi a sua ficha. Vou analisá-la com atenção e entro em contacto consigo muito em breve."));
+  }
+  const acts=el("div",{class:"actions",style:"margin-top:18px"});
+  if(o.parte==="essencial"){
+    acts.append(el("button",{type:"button",class:"btn",id:"more",onclick:function(){S.stepId="espacos";startForm();}},"Acrescentar detalhes"));
+  }
+  const w=waLink("Olá, "+CONFIG.consultor.split(" ")[0]+". Acabei de preencher a ficha do imóvel.");
+  if(w)acts.append(el("a",{class:"btn "+(o.parte==="essencial"?"ghost":"gold"),href:w,target:"_blank",rel:"noopener",style:"text-decoration:none;display:inline-flex;align-items:center"},"Falar por WhatsApp"));
+  if(CONFIG.instagram)acts.append(el("a",{class:"btn ghost",href:"https://instagram.com/"+CONFIG.instagram,target:"_blank",rel:"noopener",style:"text-decoration:none;display:inline-flex;align-items:center"},"@"+CONFIG.instagram));
+  doneEl.append(acts);
+  window.scrollTo(0,0);
+}
+
+/* =====================================================================
+   ARRANQUE
+   ===================================================================== */
+function init(){
+  $("#hName").textContent=CONFIG.consultor;
+  $("#hRole").textContent=CONFIG.funcao;
+  $("#foot").textContent=[CONFIG.consultor,CONFIG.funcao,CONFIG.telefone].filter(Boolean).join(" · ");
+  document.title="Ficha do Imóvel · "+CONFIG.consultor;
+  STEPS.forEach(s=>{if(s.intro)s.intro=s.intro.replace("__MAXMB__",CONFIG.maxFicheiroMB);});
+  const d=loadDraft();
+  if(d&&d.v&&Object.keys(d.v).length){
+    S.v=d.v;S.nao=d.nao||{};S.stepId=d.stepId||"sobre";S.sid=d.sid||null;S.folderId=d.folderId||null;S.enviado=d.enviado||null;S.consent=!!d.consent;
+    $("#resume").hidden=false;
+    $("#resume").addEventListener("click",startForm);
+    $("#start").textContent="Começar de novo";
+    $("#start").addEventListener("click",function(){S.v={};S.nao={};S.stepId="sobre";S.sid=null;S.folderId=null;S.enviado=null;S.consent=false;clearDraft();startForm();});
+  }else{
+    $("#start").addEventListener("click",startForm);
+  }
+  try{history.replaceState({s:"intro"},"");}catch(e){}
+}
+init();
+})();
+</script>
+</body>
+</html>
